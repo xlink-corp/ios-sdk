@@ -1,4 +1,4 @@
-#  Xlink Android SDK
+#  Xlink iOS SDK
 
 ## 简介
 
@@ -20,8 +20,7 @@
 
 ## 版本要求
 
-Android SDK 要求 Android 2.3 及以上版本
-请使用 Java 7 或以上版本
+iOS 8 及以上版本
 
 
 ## 接入方法
@@ -29,5 +28,3 @@ Android SDK 要求 Android 2.3 及以上版本
 
 
 ## 注意事项
-
-- 建议使用 Android Studio进行开发
