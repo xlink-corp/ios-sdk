@@ -13,8 +13,10 @@
 #define RequestTypePUT      @"PUT"
 #define RequestTypePOST     @"POST"
 #define RequestTypeDelete   @"DELETE"
-//
-#define Domain @"http://api2.xlink.cn"
+
+//#define Domain @"http://192.168.2.111:8887"    //测试服务器
+//#define Domain @"http://42.121.122.228:8887"    //测试服务器
+#define Domain @"http://api2.xlink.cn"          //正式服务器
 
 @implementation DeviceObject
 
@@ -161,7 +163,20 @@
     
 }
 
-#pragma mark 6、修改账号昵称
+#pragma mark 6、刷新凭证
++(void)refreshAccessToken:(NSString *)accessToken withRefreshToken:(NSString *)refreshToken didLoadData:(MyBlock)block{
+    
+    do {
+        HttpRequest *req = [[HttpRequest alloc] init];
+        req.myBlock = block;
+        NSDictionary *header = @{@"Content-Type" : @"application/json", @"Access-Token" : accessToken};
+        NSDictionary *content = @{@"refresh_token" : refreshToken};
+        [req requestWithRequestType:RequestTypePOST withUrl:[NSString stringWithFormat:@"%@/v2/user/token/refresh", Domain] withHeader:header withContent:content];
+    } while (0);
+    
+}
+
+#pragma mark 7、修改账号昵称
 +(void)modifyAccountNickname:(NSString *)nickname withUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     
     do {
@@ -174,7 +189,7 @@
     
 }
 
-#pragma mark 7、重置密码
+#pragma mark 8、重置密码
 +(void)resetPasswordWithOldPassword:(NSString *)oldPwd withNewPassword:(NSString *)newPwd withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     
     do {
@@ -188,7 +203,7 @@
     
 }
 
-#pragma mark 8.1、忘记密码(获取重置密码的验证码)
+#pragma mark 9.1、忘记密码(获取重置密码的验证码)
 +(void)forgotPasswordWithAccount:(NSString *)account didLoadData:(MyBlock)block{
     
     do {
@@ -211,7 +226,7 @@
     
 }
 
-#pragma mark 8.2、找回密码(根据验证码设置新密码)
+#pragma mark 9.2、找回密码(根据验证码设置新密码)
 +(void)foundBackPasswordWithAccount:(NSString *)account withVerifyCode:(NSString *)verifyCode withNewPassword:(NSString *)pwd didLoadData:(MyBlock)block{
     
     do {
@@ -237,7 +252,7 @@
     
 }
 
-#pragma mark 10、取消订阅
+#pragma mark 11、取消订阅
 +(void)unsubscribeDeviceWithUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken withDeviceID:(NSNumber *)deviceID didLoadData:(MyBlock)block{
     do {
         
@@ -249,7 +264,7 @@
     } while (0);
 }
 
-#pragma mark 11、用户列表查询
+#pragma mark 12、用户列表查询
 +(void)getUserListWithAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -259,7 +274,7 @@
     } while (0);
 }
 
-#pragma mark 12、获取用户详细信息
+#pragma mark 13、获取用户详细信息
 +(void)getUserInfoWithUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     
     do {
@@ -271,7 +286,7 @@
     
 }
 
-#pragma mark 13、获取设备列表
+#pragma mark 14、获取设备列表
 +(void)getDeviceListWithUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken withVersion:(NSNumber *)version didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -283,7 +298,7 @@
     } while (0);
 }
 
-#pragma mark 14、获取设备的订阅用户列表
+#pragma mark 15、获取设备的订阅用户列表
 +(void)getDeviceUserListWithUserID:(NSNumber *)userID withDeviceID:(NSNumber *)deviceID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -293,7 +308,7 @@
     } while (0);
 }
 
-#pragma mark 15、设置用户扩展属性
+#pragma mark 16、设置用户扩展属性
 +(void)setUserPropertyDictionary:(NSDictionary *)dic withUserID:(NSString *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -303,7 +318,7 @@
     } while (0);
 }
 
-#pragma mark 16、获取用户扩展属性
+#pragma mark 17、获取用户扩展属性
 +(void)getUserPropertyWithUserID:(NSString *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -313,7 +328,7 @@
     } while (0);
 }
 
-#pragma mark 17、修改用户扩展属性
+#pragma mark 18、修改用户扩展属性
 +(void)modifyUserPropertyDictionary:(NSDictionary *)dic withUserID:(NSString *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -323,7 +338,7 @@
     } while (0);
 }
 
-#pragma mark 18、获取用户单个扩展属性
+#pragma mark 19、获取用户单个扩展属性
 +(void)getUserSinglePropertyWithUserID:(NSString *)userID withPropertyKey:(NSString *)key withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -333,7 +348,7 @@
     } while (0);
 }
 
-#pragma mark 19、删除用户扩展属性
+#pragma mark 20、删除用户扩展属性
 +(void)delUserPropertyWithUserID:(NSString *)userID withPropertyKey:(NSString *)key withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -343,7 +358,7 @@
     } while (0);
 }
 
-#pragma mark 20、停用用户
+#pragma mark 21、停用用户
 +(void)disableUserWithUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -353,7 +368,7 @@
     } while (0);
 }
 
-#pragma mark 21、更新用户所在区域
+#pragma mark 22、更新用户所在区域
 +(void)UpdateUserAreaWithUserID:(NSNumber *)userID withAreaID:(NSString *)areaID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -363,7 +378,7 @@
     } while (0);
 }
 
-#pragma mark 22、用户注册APN服务
+#pragma mark 23、用户注册APN服务
 +(void)registerAPNServiceWithUserID:(NSNumber *)userID withDeviceToken:(NSString *)deviceToken withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -374,7 +389,7 @@
     } while (0);
 }
 
-#pragma mark 23、用户停用APN服务
+#pragma mark 24、用户停用APN服务
 +(void)disableAPNServiceWithUserID:(NSNumber *)userID withAppID:(NSString *)appID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -385,7 +400,7 @@
     } while (0);
 }
 
-#pragma mark 24、获取用户注册的APN服务信息列表
+#pragma mark 25、获取用户注册的APN服务信息列表
 +(void)getUserAPNServiceInfoWithUserID:(NSNumber *)userID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -445,7 +460,17 @@
 #pragma mark 
 #pragma mark 设备开发接口
 
-#pragma mark 1、添加设备
+#pragma mark 15、获取产品数据端点列表
++(void)getDataPointListWithProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
+    do {
+        HttpRequest *req = [[HttpRequest alloc] init];
+        req.myBlock = block;
+        NSDictionary *header = @{@"Content-Type" : @"application/json", @"Access-Token" : accessToken};
+        [req requestWithRequestType:RequestTypeGet withUrl:[NSString stringWithFormat:@"%@/v2/product/%@/datapoints", Domain, productID] withHeader:header withContent:nil];
+    } while (0);
+}
+
+#pragma mark 20、添加设备
 +(void)addDeviceWithMacAddress:(NSString *)mac withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -455,7 +480,7 @@
     } while (0);
 }
 
-#pragma mark 2、导入设备
+#pragma mark 21、导入设备
 +(void)importDeviceWithMacAddressArr:(NSArray *)macArr withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -465,7 +490,7 @@
     } while (0);
 }
 
-#pragma mark 3、获取设备信息
+#pragma mark 22、获取设备信息
 +(void)getDeviceInfoWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -475,7 +500,7 @@
     } while (0);
 }
 
-#pragma mark 4、修改设备信息
+#pragma mark 23、修改设备信息
 +(void)modifyDeviceInfoWithDeviceID:(NSNumber *)deviceID withInfoDic:(NSDictionary *)dic withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -485,7 +510,7 @@
     } while (0);
 }
 
-#pragma mark 5、查询设备列表
+#pragma mark 24、查询设备列表
 +(void)queryDeviceListWithProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -495,7 +520,7 @@
     } while (0);
 }
 
-#pragma mark 6、删除设备
+#pragma mark 25、删除设备
 +(void)delDeviceWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -505,7 +530,7 @@
     } while (0);
 }
 
-#pragma mark 7、设置设备扩展属性
+#pragma mark 26、设置设备扩展属性
 +(void)setDevicePropertyDictionary:(NSDictionary *)dic withDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -515,17 +540,7 @@
     } while (0);
 }
 
-#pragma mark 8、获取设备扩展属性
-+(void)getDevicePropertyWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
-    do {
-        HttpRequest *req = [[HttpRequest alloc] init];
-        req.myBlock = block;
-        NSDictionary *header = @{@"Content-Type" : @"application/json", @"Access-Token" : accessToken};
-        [req requestWithRequestType:RequestTypeGet withUrl:[NSString stringWithFormat:@"%@/v2/product/%@/device/%@/property", Domain, productID, deviceID] withHeader:header withContent:nil];
-    } while (0);
-}
-
-#pragma mark 9、修改设备扩展属性
+#pragma mark 27、修改设备扩展属性
 +(void)modifyDevicePropertyDictionary:(NSDictionary *)dic withDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
@@ -535,17 +550,27 @@
     } while (0);
 }
 
+#pragma mark 28、获取设备扩展属性
++(void)getDevicePropertyWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block{
+    do {
+        HttpRequest *req = [[HttpRequest alloc] init];
+        req.myBlock = block;
+        NSDictionary *header = @{@"Content-Type" : @"application/json", @"Access-Token" : accessToken};
+        [req requestWithRequestType:RequestTypeGet withUrl:[NSString stringWithFormat:@"%@/v2/product/%@/device/%@/property", Domain, productID, deviceID] withHeader:header withContent:nil];
+    } while (0);
+}
+
 #pragma mark
 #pragma mark 分享部分
 
 #pragma mark 1、分享设备
-+(void)shareDeviceWithDeviceID:(NSNumber *)deviceID withAccessToken:(NSString *)accessToken withShareAccount:(NSString *)account withExpire:(NSNumber *)expire didLoadData:(MyBlock)block{
++(void)shareDeviceWithDeviceID:(NSNumber *)deviceID withAccessToken:(NSString *)accessToken withShareAccount:(NSString *)account withExpire:(NSNumber *)expire withMode:(NSString *)mode didLoadData:(MyBlock)block{
     do {
         HttpRequest *req = [[HttpRequest alloc] init];
         req.myBlock = block;
         NSDictionary *header = @{@"Content-Type" : @"application/json", @"Access-Token" : accessToken};
         
-        NSDictionary *dic = @{@"device_id" : deviceID, @"user" : account, @"expire" : expire, @"mode" : @"email"};
+        NSDictionary *dic = @{@"device_id" : deviceID, @"user" : account, @"expire" : expire, @"mode" : mode};
         
         [req requestWithRequestType:RequestTypePOST withUrl:[NSString stringWithFormat:@"%@/v2/share/device", Domain] withHeader:header withContent:dic];
     } while (0);

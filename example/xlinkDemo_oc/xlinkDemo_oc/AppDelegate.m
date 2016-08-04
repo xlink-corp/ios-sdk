@@ -43,7 +43,10 @@
     
     [XLinkExportObject sharedObject].delegate = self;
     // 设置运行属性
-    [[XLinkExportObject sharedObject] setSDKProperty:@"42.121.122.23" withKey:PROPERTY_CM_SERVER_ADDR];
+    //测试服务器
+//    [[XLinkExportObject sharedObject] setSDKProperty:@"42.121.122.23" withKey:PROPERTY_CM_SERVER_ADDR];
+    //正式服务器
+    [[XLinkExportObject sharedObject] setSDKProperty:@"cm2.xlink.cn" withKey:PROPERTY_CM_SERVER_ADDR];
     [[XLinkExportObject sharedObject] setSDKProperty:[NSNumber numberWithBool:NO] withKey:PROPERTY_SEND_OVERTIME_CHECK];
     [[XLinkExportObject sharedObject] setSDKProperty:[NSNumber numberWithBool:YES] withKey:PROPERTY_SEND_DATA_BUFFER];
     [[XLinkExportObject sharedObject] setSDKProperty:[NSNumber numberWithFloat:0.3] withKey:PROPERTY_SEND_DATA_INTERVAL];
@@ -239,6 +242,14 @@
             }
         }];
     }
+}
+
+-(void)onLocalDataPoint2Update:(DeviceEntity *)device withDataPoints:(NSArray *)dataPoints{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kOnLocalDataPoint2Update object:@{@"device" : device, @"datapoints" : dataPoints}];
+}
+
+-(void)onCloudDataPoint2Update:(DeviceEntity *)device withDataPoints:(NSArray *)dataPoints{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kOnCloudDataPoint2Update object:@{@"device" : device, @"datapoints" : dataPoints}];
 }
 
 @end

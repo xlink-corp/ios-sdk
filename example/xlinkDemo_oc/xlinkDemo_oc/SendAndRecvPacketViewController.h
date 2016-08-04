@@ -12,6 +12,4 @@
 
 @interface SendAndRecvPacketViewController : UIViewController
 
-@property (strong, nonatomic) DeviceEntity *deviceEntity;
-
 @end

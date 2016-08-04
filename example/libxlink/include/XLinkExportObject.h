@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
+@class DataPointEntity;
+
 #define XLINK_SDK_VER         @"1.2.0.14134"
 
 #define ExtLoginState @"extLoginState"
@@ -308,6 +310,24 @@
 
 
 /**
+ *  本地收到dataPoint sync包（非数据模板）
+ *
+ *  @param device 设备实体
+ *  @param data   数据
+ */
+-(void)onLocalDataPoint2Update:(DeviceEntity *)device withDataPoints:(NSArray <DataPointEntity *> *)dataPoints;
+
+
+/**
+ *  云端收到dataPoint sync包（非数据模板）
+ *
+ *  @param device 设备实体
+ *  @param data   数据
+ */
+-(void)onCloudDataPoint2Update:(DeviceEntity *)device withDataPoints:(NSArray <DataPointEntity *> *)dataPoints;
+
+
+/**
  *  网络状态改变通知
  *
  *  @param state 状态值
@@ -362,7 +382,11 @@
  *  @param messageID 消息ID，APP可以忽略
  */
 -(void)onNotifyWithFlag:(unsigned char)flag withMessageData:(NSData *)data fromID:(int)fromID messageID:(int)messageID;
-    
+
+-(void)onSetLocalDataPoint:(DeviceEntity *)device withResult:(int)result withMsgID:(unsigned short)msgID;
+
+-(void)onSetCloudDataPoint:(DeviceEntity *)device withResult:(int)result withMsgID:(unsigned short)msgID;
+
 @end
 
 @interface XLinkExportObject : NSObject
@@ -447,7 +471,7 @@
  *  @param device  设备实体
  *  @param payload 数据值，二进制的。
  *
- *  @return 0 为成功，其它失败。其发送结果通过onSendLocalPipeData回调返回。
+ *  @return >0 为成功，<0 失败。其发送结果通过onSendLocalPipeData回调返回。
  */
 -(int)sendLocalPipeData:(DeviceEntity *)device andPayload:(NSData *)payload;
 
@@ -458,7 +482,7 @@
  *  @param device  设备实体
  *  @param payload 数据值，二进制的。
  *
- *  @return 0 为成功，其它失败。其发送结果通过onSendLocalPipeData回调返回。
+ *  @return >0 为成功，<0 失败。其发送结果通过onSendLocalPipeData回调返回。
  */
 -(int)sendPipeData:(DeviceEntity *)device andPayload:(NSData *)payload;
 
@@ -543,8 +567,30 @@
  */
 -(NSObject *)getSDKProperty:(NSString *)key;
 
+/**
+ *  通过本地设置设备DataPoint
+ *
+ *  @param dataPoint 设备的DataPoint
+ *  @param device    要设置的设备
+ *
+ *  @return 失败：0， 成功：msgID
+ *
+ */
+-(unsigned short)setLocalDataPoints:(NSArray <DataPointEntity *> *)dataPoints withDevice:(DeviceEntity *)device;
 
--(int)subscribeDevice:(DeviceEntity *)device andAuthKey:(NSNumber *)authKey andFlag:(BOOL)flag;
+
+/**
+ *  通过云端设置设备DataPoint
+ *
+ *  @param dataPoint 设备的DataPoint
+ *  @param device    要设置的设备
+ *
+ *  @return 失败：0， 成功：msgID
+ *
+ */
+-(unsigned short)setCloudDataPoints:(NSArray <DataPointEntity *> *)dataPoints withDevice:(DeviceEntity *)device;
+
+-(int)subscribeDevice:(DeviceEntity *)device andAuthKey:(NSNumber *)authKey andFlag:(int8_t)flag;
 
 
 @end

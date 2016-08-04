@@ -8,6 +8,7 @@
 
 #import "SendAndRecvPacketViewController.h"
 #import "AddPacketViewController.h"
+#import "DeviceTabBarViewController.h"
 
 #import "XLinkExportObject.h"
 #import "DeviceEntity.h"
@@ -28,44 +29,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    // Do any additional setup after loading the view.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendPipeData:) name:kOnSendPipeData object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSendLocalPipeData:) name:kOnSendLocalPipeData object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecvLocalPipeData:) name:kOnRecvLocalPipeData object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecvPipeData:) name:kOnRecvPipeData object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onRecvSyncPipeData:) name:kOnRecvPipeSyncData object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceStateChanged:) name:kOnDeviceStateChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLocalDataPoint2Update:) name:kOnLocalDataPoint2Update object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onCloudDataPoint2Update:) name:kOnCloudDataPoint2Update object:nil];
     
     _logArr = [NSMutableArray array];
     
     _logTextView.layoutManager.allowsNonContiguousLayout = NO;
     
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    self.navigationItem.leftBarButtonItem = backItem;
-    
-    self.title = [[_deviceEntity getMacAddressString] uppercaseString];
-    
     [_tableView setSeparatorColor:[UIColor colorWithRed:0x7c / 255.0 green:0x9b / 255.0 blue:0xb1 / 255.0 alpha:1]];
     
-    NSString *title;
-    if (_deviceEntity.connectStatus == ConnectStatusLANAndWANConnectSuccessfully) {
-        title = @"本地&云端";
-    }else if (_deviceEntity.connectStatus == ConnectStatusLANAndWANConnectFailed){
-        title = @"离线";
-    }else if (_deviceEntity.connectStatus & ConnectStatusLANConnectSuccessfully) {
-        title = @"本地";
-    }else if (_deviceEntity.connectStatus & ConnectStatusWANConnectSuccessfully){
-        title = @"云端";
-    }else{
-        title = @"连接中";
-    }
-    UILabel *label = [[UILabel alloc] init];
-    label.textColor = [UIColor whiteColor];
-    label.text= title;
-    [label sizeToFit];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:label];
-    self.navigationItem.rightBarButtonItem = item;
 //    TextImageBarButtonItem *statusItem = [[TextImageBarButtonItem alloc] initWithText:[NSString stringWithFormat:@"%@", title] withImage:[UIImage imageNamed:[NSString stringWithFormat:@"IsConnected_%d", _deviceEntity.connectStatus & ConnectStatusLANAndWANConnectSuccessfully]]];
 //    [statusItem setTextImaheBarButtonItemMode:LeftImageRightTextModel];
 //    self.navigationItem.rightBarButtonItem = statusItem;
@@ -92,34 +69,6 @@
     AddPacketViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@"AddPacketViewController"];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:true];
-}
-
--(void)back{
-    if( _deviceEntity != nil ) {
-        [[XLinkExportObject sharedObject] disconnectDevice:_deviceEntity withReason:0];
-    }
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
--(void)updateStatus{
-    NSString *title;
-    if (_deviceEntity.connectStatus == ConnectStatusLANAndWANConnectSuccessfully) {
-        title = @"本地&云端";
-    }else if (_deviceEntity.connectStatus == ConnectStatusLANAndWANConnectFailed){
-        title = @"离线";
-    }else if (_deviceEntity.connectStatus & ConnectStatusLANConnectSuccessfully) {
-        title = @"本地";
-    }else if (_deviceEntity.connectStatus & ConnectStatusWANConnectSuccessfully){
-        title = @"云端";
-    }else{
-        title = @"连接中";
-    }
-    UIBarButtonItem *statusItem = self.navigationItem.rightBarButtonItem;
-    ((UILabel *)statusItem.customView).text = title;
-    [(UILabel *)statusItem.customView sizeToFit];
-//    statusItem.text = title;
-//    statusItem.image = [UIImage imageNamed:[NSString stringWithFormat:@"IsConnected_%d", _deviceEntity.connectStatus & ConnectStatusLANAndWANConnectSuccessfully]];
 }
 
 -(void)updateLogTextView{
@@ -192,11 +141,13 @@
 
 -(void)sendHexCode:(NSString*)hexCode{
     
+    DeviceTabBarViewController *tabBar = (DeviceTabBarViewController *)self.tabBarController;
+    
     NSData *data = [self hexToData:hexCode];
     
     int msgID = 0;
-    if (_deviceEntity.connectStatus & ConnectStatusLANConnectSuccessfully) {
-        msgID = [[XLinkExportObject sharedObject] sendLocalPipeData:_deviceEntity andPayload:data];
+    if (tabBar.device.connectStatus & ConnectStatusLANConnectSuccessfully) {
+        msgID = [[XLinkExportObject sharedObject] sendLocalPipeData:tabBar.device andPayload:data];
         if( msgID > 0 ) {
             // 发送成功
             [self addLog:hexCode withTitle:[NSString stringWithFormat:@"Send Local Data ID:%d", msgID]];
@@ -206,8 +157,8 @@
             [self addLog:nil withTitle:[NSString stringWithFormat:@"Send Local Data\r\n%@", log]];
         }
     }
-    if (_deviceEntity.connectStatus & ConnectStatusWANConnectSuccessfully) {
-        msgID = [[XLinkExportObject sharedObject] sendPipeData:_deviceEntity andPayload:data];
+    if (tabBar.device.connectStatus & ConnectStatusWANConnectSuccessfully) {
+        msgID = [[XLinkExportObject sharedObject] sendPipeData:tabBar.device andPayload:data];
         if( msgID > 0 ) {
             // 发送成功
             [self addLog:hexCode withTitle:[NSString stringWithFormat:@"Send Cloud Data ID:%d", msgID]];
@@ -342,6 +293,14 @@
     [self notifyRecvData:notify from:@"Cloud"];
 }
 
+-(void)onLocalDataPoint2Update:(NSNotification *)noti{
+//    [self notifyRecvData:noti from:@"Local DataPoint"];
+}
+
+-(void)onCloudDataPoint2Update:(NSNotification *)noti{
+//    [self notifyRecvData:noti from:@"Cloud DataPoint"];
+}
+
 - (void)notifyRecvData:(NSNotification *)notify from:(NSString *)from {
     NSData *payload = [notify.object objectForKey:@"payload"];
     NSMutableString *hexCode = [NSMutableString string];
@@ -356,34 +315,6 @@
     [self performSelectorOnMainThread:@selector(addRecvLog:) withObject:dict waitUntilDone:NO];
 }
 
-- (void)onDeviceStateChanged:(NSNotification *)notify {
-    //    DeviceEntity * device = [notify.object objectForKey:@"device"];
-//    int state = [[notify.object objectForKey:@"state"] intValue];
-    [self performSelectorOnMainThread:@selector(updateStatus) withObject:nil waitUntilDone:NO];
-    
-}
-
-//- (void)deviceStateNotify:(NSNumber *)state {
-//    NSString *msg;
-//    if( [state intValue] == CODE_DEVICE_RECONNECT) {
-//        msg = @"正在重新连接设备...";
-//    } else if( [state intValue] == CODE_DEVICE_DISCONNECTED ) {
-//        msg = @"设备连接中断";
-//    } else {
-//        msg = @"设备连接成功";
-//    }
-//    
-//    if (self.presentedViewController) {
-//        [self.presentedViewController dismissViewControllerAnimated:NO completion:^{
-//            [self showWarningAlert:msg didFinish:nil];
-//        }];
-//    }else{
-//        [self showWarningAlert:msg didFinish:nil];
-//    }
-//    
-//    [self updateStatus];
-//}
-
 -(void)showWarningAlert:(NSString *)msg didFinish:(void (^)(void))finish{
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -396,3 +327,23 @@
 }
 
 @end
+
+/*
+ 00 00 01 f8
+ 01 00 01 af
+ 02 10 02 32d5
+ 03 30 04 009896fd
+ 04 90 18 e794b5e9 a5ade994 85656c65 63747269 632063
+ 
+ 00 00 01 8e
+ 01 00 01 45
+ 02 10 02 326b
+ 03 30 04 00989693
+ 04 90 18 e794b5e9 a5ade994 85656c65 63747269 632063
+ 
+ 00 00 01 d7
+ 01 00 01 8e
+ 02 10 02 32b4
+ 03 30 04 009896dc
+ 04 90 18 e794b5e9 a5ade994 85656c65 63747269 6320636f 6f6b6572
+ */

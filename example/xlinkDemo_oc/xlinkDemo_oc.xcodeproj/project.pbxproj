@@ -73,7 +73,12 @@
 		E51E31681CC0D6E600B45B2E /* off.png in Resources */ = {isa = PBXBuildFile; fileRef = E51E31341CC0D6E600B45B2E /* off.png */; };
 		E51E31691CC0D6E600B45B2E /* on.png in Resources */ = {isa = PBXBuildFile; fileRef = E51E31351CC0D6E600B45B2E /* on.png */; };
 		E51E316A1CC0D6E600B45B2E /* root.p12 in Resources */ = {isa = PBXBuildFile; fileRef = E51E31361CC0D6E600B45B2E /* root.p12 */; };
-		E5C78F9A1CC8C4BA0077C0C3 /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E5C78F991CC8C4BA0077C0C3 /* HttpRequest.m */; };
+		E55209791D51E70D002FEACC /* HttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E55209781D51E70D002FEACC /* HttpRequest.m */; };
+		E5614B9A1D0D0DFF009F003A /* DataPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5614B991D0D0DFF009F003A /* DataPointViewController.m */; };
+		E5AFF5091D07FC63009F686B /* BoolTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5AFF5081D07FC63009F686B /* BoolTableViewCell.m */; };
+		E5AFF50C1D07FC72009F686B /* ValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5AFF50B1D07FC72009F686B /* ValueTableViewCell.m */; };
+		E5AFF50F1D07FC7E009F686B /* TextTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E5AFF50E1D07FC7E009F686B /* TextTableViewCell.m */; };
+		E5AFF5121D08051E009F686B /* DeviceTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E5AFF5111D08051E009F686B /* DeviceTabBarViewController.m */; };
 		E5CB3A461CC4821A008D0258 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = E5CB3A451CC4821A008D0258 /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
@@ -176,8 +181,18 @@
 		E51E31341CC0D6E600B45B2E /* off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off.png; sourceTree = "<group>"; };
 		E51E31351CC0D6E600B45B2E /* on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = on.png; sourceTree = "<group>"; };
 		E51E31361CC0D6E600B45B2E /* root.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = root.p12; sourceTree = "<group>"; };
-		E5C78F981CC8C4BA0077C0C3 /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
-		E5C78F991CC8C4BA0077C0C3 /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRequest.m; sourceTree = "<group>"; };
+		E55209771D51E70D002FEACC /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
+		E55209781D51E70D002FEACC /* HttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HttpRequest.m; sourceTree = "<group>"; };
+		E5614B981D0D0DFF009F003A /* DataPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataPointViewController.h; sourceTree = "<group>"; };
+		E5614B991D0D0DFF009F003A /* DataPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataPointViewController.m; sourceTree = "<group>"; };
+		E5AFF5071D07FC63009F686B /* BoolTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoolTableViewCell.h; sourceTree = "<group>"; };
+		E5AFF5081D07FC63009F686B /* BoolTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoolTableViewCell.m; sourceTree = "<group>"; };
+		E5AFF50A1D07FC72009F686B /* ValueTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueTableViewCell.h; sourceTree = "<group>"; };
+		E5AFF50B1D07FC72009F686B /* ValueTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ValueTableViewCell.m; sourceTree = "<group>"; };
+		E5AFF50D1D07FC7E009F686B /* TextTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableViewCell.h; sourceTree = "<group>"; };
+		E5AFF50E1D07FC7E009F686B /* TextTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableViewCell.m; sourceTree = "<group>"; };
+		E5AFF5101D08051E009F686B /* DeviceTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTabBarViewController.h; sourceTree = "<group>"; };
+		E5AFF5111D08051E009F686B /* DeviceTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceTabBarViewController.m; sourceTree = "<group>"; };
 		E5CB3A441CC4821A008D0258 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		E5CB3A451CC4821A008D0258 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -230,17 +245,21 @@
 		E51E30A41CC079CD00B45B2E /* xlinkDemo_oc */ = {
 			isa = PBXGroup;
 			children = (
-				E5C78F971CC8C4BA0077C0C3 /* HttpRequest */,
+				E55209761D51E70D002FEACC /* HttpRequest */,
 				E51E30A81CC079CE00B45B2E /* AppDelegate.h */,
 				E51E30A91CC079CE00B45B2E /* AppDelegate.m */,
 				E51E30AB1CC079CE00B45B2E /* ViewController.h */,
 				E51E30AC1CC079CE00B45B2E /* ViewController.m */,
 				E51E30E91CC0993400B45B2E /* ScanDeviceViewController.h */,
 				E51E30EA1CC0993400B45B2E /* ScanDeviceViewController.m */,
+				E5AFF5101D08051E009F686B /* DeviceTabBarViewController.h */,
+				E5AFF5111D08051E009F686B /* DeviceTabBarViewController.m */,
 				E51E30F41CC0C4EE00B45B2E /* SendAndRecvPacketViewController.h */,
 				E51E30F51CC0C4EE00B45B2E /* SendAndRecvPacketViewController.m */,
 				E51E30FB1CC0CAEE00B45B2E /* AddPacketViewController.h */,
 				E51E30FC1CC0CAEE00B45B2E /* AddPacketViewController.m */,
+				E5614B981D0D0DFF009F003A /* DataPointViewController.h */,
+				E5614B991D0D0DFF009F003A /* DataPointViewController.m */,
 				E51E30F11CC0C40200B45B2E /* AboutViewController.h */,
 				E51E30F21CC0C40200B45B2E /* AboutViewController.m */,
 				E51E30FE1CC0CC0800B45B2E /* PacketLog.h */,
@@ -250,6 +269,7 @@
 				E51E30B11CC079CE00B45B2E /* Assets.xcassets */,
 				E51E30EC1CC09B7000B45B2E /* Main.storyboard */,
 				E51E30B31CC079CE00B45B2E /* LaunchScreen.storyboard */,
+				E5AFF5031D07F56D009F686B /* View */,
 				E5CB3A431CC4821A008D0258 /* MBProgressHUD */,
 				E51E31011CC0D6E600B45B2E /* resource */,
 				E51E30A51CC079CD00B45B2E /* Supporting Files */,
@@ -352,14 +372,27 @@
 			path = images;
 			sourceTree = "<group>";
 		};
-		E5C78F971CC8C4BA0077C0C3 /* HttpRequest */ = {
+		E55209761D51E70D002FEACC /* HttpRequest */ = {
 			isa = PBXGroup;
 			children = (
-				E5C78F981CC8C4BA0077C0C3 /* HttpRequest.h */,
-				E5C78F991CC8C4BA0077C0C3 /* HttpRequest.m */,
+				E55209771D51E70D002FEACC /* HttpRequest.h */,
+				E55209781D51E70D002FEACC /* HttpRequest.m */,
 			);
 			name = HttpRequest;
 			path = ../../HttpRequest;
+			sourceTree = "<group>";
+		};
+		E5AFF5031D07F56D009F686B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E5AFF5071D07FC63009F686B /* BoolTableViewCell.h */,
+				E5AFF5081D07FC63009F686B /* BoolTableViewCell.m */,
+				E5AFF50A1D07FC72009F686B /* ValueTableViewCell.h */,
+				E5AFF50B1D07FC72009F686B /* ValueTableViewCell.m */,
+				E5AFF50D1D07FC7E009F686B /* TextTableViewCell.h */,
+				E5AFF50E1D07FC7E009F686B /* TextTableViewCell.m */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E5CB3A431CC4821A008D0258 /* MBProgressHUD */ = {
@@ -555,11 +588,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E51E30AD1CC079CE00B45B2E /* ViewController.m in Sources */,
+				E55209791D51E70D002FEACC /* HttpRequest.m in Sources */,
 				E51E30EB1CC0993400B45B2E /* ScanDeviceViewController.m in Sources */,
 				E51E30F61CC0C4EE00B45B2E /* SendAndRecvPacketViewController.m in Sources */,
-				E5C78F9A1CC8C4BA0077C0C3 /* HttpRequest.m in Sources */,
+				E5AFF5121D08051E009F686B /* DeviceTabBarViewController.m in Sources */,
 				E51E30FA1CC0C9F200B45B2E /* TextImageBarButtonItem.m in Sources */,
+				E5AFF5091D07FC63009F686B /* BoolTableViewCell.m in Sources */,
+				E5614B9A1D0D0DFF009F003A /* DataPointViewController.m in Sources */,
+				E5AFF50C1D07FC72009F686B /* ValueTableViewCell.m in Sources */,
 				E5CB3A461CC4821A008D0258 /* MBProgressHUD.m in Sources */,
+				E5AFF50F1D07FC7E009F686B /* TextTableViewCell.m in Sources */,
 				E51E30F31CC0C40200B45B2E /* AboutViewController.m in Sources */,
 				E51E30AA1CC079CE00B45B2E /* AppDelegate.m in Sources */,
 				E51E30FD1CC0CAEE00B45B2E /* AddPacketViewController.m in Sources */,
@@ -698,18 +736,16 @@
 		E51E30D01CC079CE00B45B2E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/xlinkDemo_oc/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../libxlink/include\"";
 				INFOPLIST_FILE = xlinkDemo_oc/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/../libxlink/lib/Debug-iphoneos/";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/../libxlink/lib/Debug-iphonesimulator/";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../libxlink/lib/Debug-iphoneos\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../libxlink/lib/Debug-iphonesimulator\"";
 				OTHER_LDFLAGS = (
 					"-l",
 					xlinksdklib,
@@ -723,18 +759,16 @@
 		E51E30D11CC079CE00B45B2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				ENABLE_BITCODE = NO;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/xlinkDemo_oc/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../libxlink/include\"";
 				INFOPLIST_FILE = xlinkDemo_oc/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "$(SRCROOT)/../libxlink/lib/Release-iphoneos/";
-				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "$(SRCROOT)/../libxlink/lib/Release-iphonesimulator/";
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*]" = "\"$(SRCROOT)/../libxlink/lib/Release-iphoneos\"";
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*]" = "\"$(SRCROOT)/../libxlink/lib/Release-iphonesimulator\"";
 				OTHER_LDFLAGS = (
 					"-l",
 					xlinksdklib,

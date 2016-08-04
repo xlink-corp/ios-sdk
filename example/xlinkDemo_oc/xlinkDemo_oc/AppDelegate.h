@@ -26,7 +26,10 @@
 #define kOnDeviceStateChanged           @"kOnDeviceStateChanged"
 #define kOnSetDeviceAccessKey           @"kOnSetDeviceAccessKey"
 
-#define productId       @"1607d2ae2b6c08001607d2ae2b6c0801"
+#define kOnLocalDataPoint2Update        @"kOnLocalDataPoint2Update"
+#define kOnCloudDataPoint2Update        @"kOnCloudDataPoint2Update"
+
+#define productId       @"160fa2af1082d000160fa2af1082d001"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

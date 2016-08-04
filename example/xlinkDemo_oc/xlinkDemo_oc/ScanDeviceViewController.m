@@ -8,7 +8,7 @@
 
 #import "ScanDeviceViewController.h"
 #import "AboutViewController.h"
-#import "SendAndRecvPacketViewController.h"
+#import "DeviceTabBarViewController.h"
 
 #import "XLinkExportObject.h"
 #import "DeviceEntity.h"
@@ -49,6 +49,8 @@
     self.navigationItem.rightBarButtonItem = menuItem;
     
     [_tableView setSeparatorColor:[UIColor colorWithRed:0xe1 / 255.0 green:0xe1 / 255.0 blue:0xe1 / 255.0 alpha:1]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConnectDevice:) name:kOnConnectDevice object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -60,19 +62,18 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onConnectDevice:) name:kOnConnectDevice object:nil];
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:kOnConnectDevice object:nil];
-}
+//-(void)viewWillAppear:(BOOL)animated{
+//    [super viewWillAppear:animated];
+//
+//}
+//
+//-(void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kOnConnectDevice object:nil];
+//}
 
 -(void)addNotification{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onGotDeviceByScan:) name:kOnGotDeviceByScan object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDeviceStateChanged:) name:kOnDeviceStateChanged object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSetDeviceAccessKey:) name:kOnSetDeviceAccessKey object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onSetLocalDeviceAuthorizeCode:) name:kOnSetLocalDeviceAuthorizeCode object:nil];
 }
@@ -135,12 +136,23 @@
 }
 
 //推出发送指令页面
--(void)pushSendAndRecvPacketViewController:(DeviceEntity*)device{
+-(void)pushDeviceViewControllerWithDevice:(DeviceEntity *)device withPwd:(NSNumber *)pwd{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    SendAndRecvPacketViewController *view = [storyboard instantiateViewControllerWithIdentifier:@"SendAndRecvPacketViewController"];
-    view.deviceEntity = device;
-    [self.navigationController pushViewController:view animated:YES];
+    DeviceTabBarViewController *view = [storyboard instantiateViewControllerWithIdentifier:@"DeviceTabBarViewController"];
+    view.device = device;
+    view.pwd = pwd;
+    [self performSelectorOnMainThread:@selector(pushViewController:) withObject:view waitUntilDone:YES];
 }
+
+-(void)pushViewController:(UIViewController *)vc{
+    [self.navigationController pushViewController:vc animated:YES];
+}
+//-(void)pushSendAndRecvPacketViewController:(DeviceEntity*)device{
+//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//    SendAndRecvPacketViewController *view = [storyboard instantiateViewControllerWithIdentifier:@"SendAndRecvPacketViewController"];
+//    view.deviceEntity = device;
+//    [self.navigationController pushViewController:view animated:YES];
+//}
 
 #pragma mark
 #pragma mark Menu Action
@@ -151,12 +163,6 @@
     UIAlertAction *addDeviceManualAction = [UIAlertAction actionWithTitle:@"手动添加设备" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self addDeviceManual];
     }];
-    
-//    UIAlertAction *settingAction = [UIAlertAction actionWithTitle:@"设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//        SettingViewController *view = [storyboard instantiateViewControllerWithIdentifier:@"SettingViewController"];
-//        [self.navigationController pushViewController:view animated:YES];
-//    }];
     
     UIAlertAction *cleanAction = [UIAlertAction actionWithTitle:@"清除缓存" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self clearCache];
@@ -243,13 +249,13 @@
     }
     DeviceEntity *device = _deviceList[indexPath.row];
     NSString *str = [NSString stringWithFormat:@"设备:%@(%d)", [[device getMacAddressString] uppercaseString], [device getDeviceID]];
-    if (device.connectStatus & ConnectStatusLANAndWANConnectSuccessfully) {
-        str = [NSString stringWithFormat:@"[已连接]%@", str];
-    }else if (device.connectStatus == ConnectStatusLANAndWANConnectFailed){
-        str = [NSString stringWithFormat:@"[未连接]%@", str];
-    }else{
-        str = [NSString stringWithFormat:@"[连接中]%@", str];
-    }
+//    if (device.connectStatus & ConnectStatusLANAndWANConnectSuccessfully) {
+//        str = [NSString stringWithFormat:@"[已连接]%@", str];
+//    }else if (device.connectStatus == ConnectStatusLANAndWANConnectFailed){
+//        str = [NSString stringWithFormat:@"[未连接]%@", str];
+//    }else{
+//        str = [NSString stringWithFormat:@"[连接中]%@", str];
+//    }
     
     
     NSString * name = device.deviceName;
@@ -279,9 +285,9 @@
             UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 NSNumber *pwd = @([inputAlert.textFields.firstObject text].intValue);
-                
                 NSLog(@"%@", [device getDictionaryFormat]);
-                [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:pwd];
+                [self pushDeviceViewControllerWithDevice:device withPwd:pwd];
+//                [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:pwd];
             }];
             
             [inputAlert addAction:cancelAction];
@@ -304,7 +310,6 @@
                 NSNumber *oldPwd = @([inputAlert.textFields[0] text].intValue);
                 NSNumber *newPwd = @([inputAlert.textFields[1] text].intValue);
                 [[XLinkExportObject sharedObject] setLocalDeviceAuthorizeCode:device andOldAuthCode:oldPwd andNewAuthCode:newPwd];
-                //                [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:pwd];
             }];
             
             [inputAlert addAction:cancelAction];
@@ -322,7 +327,8 @@
     }else{
         //新版本设备
         if ([device isDeviceInitted]) {
-            [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:device.accessKey];
+            [self pushDeviceViewControllerWithDevice:device withPwd:device.accessKey];
+//            [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:device.accessKey];
         }else{
             UIAlertController *inputAlert = [UIAlertController alertControllerWithTitle:nil message:@"请输入授权码" preferredStyle:UIAlertControllerStyleAlert];
             
@@ -333,7 +339,13 @@
                 NSString *ack = [inputAlert.textFields.firstObject text];
                 NSNumber *ack_int = @([ack intValue]);
                 device.accessKey = ack_int;
-                [[XLinkExportObject sharedObject] setAccessKey:ack_int withDevice:device];
+                
+                if (ack_int.unsignedIntValue <= 0 || ack_int.unsignedIntValue > 999999999) {
+                    [self showWarningAlert:@"授权码不合法"];
+                }else{
+                    [[XLinkExportObject sharedObject] setAccessKey:ack_int withDevice:device];
+                }
+                
             }];
             
             [inputAlert addAction:cancelAction];
@@ -355,34 +367,34 @@
 - (void)onConnectDevice:(NSNotification *)noti{
     DeviceEntity *device = [noti.object objectForKey:@"device"];
     NSInteger result = [[noti.object objectForKey:@"result"] integerValue];
-    
-    NSLog(@"%@", device.accessKey);
-    
-    switch (result) {
-        case 0:{
-            [[XLinkExportObject sharedObject] subscribeDevice:device andAuthKey:device.accessKey andFlag:YES];
-            [self performSelectorOnMainThread:@selector(pushSendAndRecvPacketViewController:) withObject:device waitUntilDone:YES];
-        }
-            break;
-        case 2:{
-            [self showWarningAlert:@"授权码认证失败" didFinish:nil];
-        }
-            break;
-        default:
-            break;
+    if (result == 0) {
+        [self addDeviceCache:device];
     }
-    
-}
-
-- (void)onDeviceStateChanged:(NSNotification*)notify{
-    [_tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+//
+//    NSLog(@"%@", device.accessKey);
+//    
+//    switch (result) {
+//        case 0:{
+////            [[XLinkExportObject sharedObject] subscribeDevice:device andAuthKey:device.accessKey andFlag:YES];
+//            [self performSelectorOnMainThread:@selector(pushSendAndRecvPacketViewController:) withObject:device waitUntilDone:YES];
+//        }
+//            break;
+//        case 2:{
+//            [self showWarningAlert:@"授权码认证失败" didFinish:nil];
+//        }
+//            break;
+//        default:
+//            break;
+//    }
+//    
 }
 
 -(void)onSetDeviceAccessKey:(NSNotification *)noti{
     NSLog(@"%@", noti.object);
     DeviceEntity *device = [noti.object objectForKey:@"device"];
     NSNumber *ack = device.accessKey;
-    [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:ack];
+    [self pushDeviceViewControllerWithDevice:device withPwd:ack];
+//    [[XLinkExportObject sharedObject] connectDevice:device andAuthKey:ack];
     
 }
 

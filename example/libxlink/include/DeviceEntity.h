@@ -32,14 +32,15 @@ typedef enum : UInt8 {
 @property (nonatomic,assign)int mcuHardVersion;         //mcu硬件版本号      <1byte
 @property (nonatomic,assign)int mcuSoftVersion;         //mcu软件版本号      <2bytes
 @property (nonatomic,assign)int devicePort;             //设备监听的端口号    <2bytes
-@property (nonatomic,assign)int version;                //协议版本
-@property (nonatomic,assign)int sessionID;              //会话的sessionID
+@property (nonatomic,assign)int8_t version;                //协议版本
+@property (nonatomic,assign)int16_t sessionID;              //会话的sessionID
 @property (nonatomic,assign)int flag;                   //扫描回来的payload的消息标示
-@property (nonatomic,assign)int deviceID;               //设备ID主要用来确认设备
+@property (nonatomic,assign)int32_t deviceID;               //设备ID主要用来确认设备
 @property (nonatomic,assign) ConnectStatus connectStatus; //连接状态
 @property (nonatomic,assign)double lastGetPingReturn;   //获得ping回包的最近的时间，用来判断设备是否下线了
 @property (nonatomic,assign) unsigned short deviceType; //设备类型
 @property (strong, nonatomic) NSNumber *accessKey;
+@property (assign, nonatomic) int32_t   subKey;         //订阅密码
 @property (strong, nonatomic) NSString *deviceName;     //设备名称
 
 @property (assign, nonatomic, readonly) bool isConnected; //设备是否连接上
@@ -51,7 +52,7 @@ typedef enum : UInt8 {
 //扫描回包，或者同步包来设置设备的名字和datapoint的数据断电值
 -(void)initPropertyWithData:(NSData *)data;
 //设置对话的sessionID
--(void)setSessionID:(int)sessionID;
+-(void)setSessionID:(int16_t)sessionID;
 //获得对话的ID
 -(int)getSessionID;
 //老协议保留deprecated

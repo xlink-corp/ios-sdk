@@ -8,14 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-#define CorpId @"1007d2ada2c3ca02"
-#define APN_APP_ID @"2e0fa2ae20a32400"
+#define CorpId @"100fa2aea278ca00"
+#define APN_APP_ID @"2e07d2ad3c33aa00"
 
-#define CustomErrorDomain @"cn.xlink.httpRequest"
+#define CustomErrorDomain @"cn.xlink.httpRequest"  //正式服务器
 
 #define ErrInfo(ErrCode) [HttpRequest getErrorInfoWithErrorCode:(ErrCode)]
 
 typedef void (^MyBlock) (id result, NSError *err);
+
 
 @interface DeviceObject : NSObject
 
@@ -73,6 +74,15 @@ typedef void (^MyBlock) (id result, NSError *err);
  *  @param block   完成后的回调
  */
 +(void)authWithAccount:(NSString *)account withPassword:(NSString *)pwd didLoadData:(MyBlock)block;
+
+/**
+ *  刷新调用凭证
+ *
+ *  @param accessToken  调用凭证
+ *  @param refreshToken 刷新凭证
+ *  @param block        完成后的回调
+ */
++(void)refreshAccessToken:(NSString *)accessToken withRefreshToken:(NSString *)refreshToken didLoadData:(MyBlock)block;
 
 /**
  *  7、修改账号昵称
@@ -307,9 +317,17 @@ typedef void (^MyBlock) (id result, NSError *err);
 #pragma mark 
 #pragma mark 设备开发接口
 
+/**
+ *  15、获取产品数据端点列表
+ *
+ *  @param productID   产品ID
+ *  @param accessToken 调用凭证
+ *  @param block       完成后的回调
+ */
++(void)getDataPointListWithProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  1、添加设备
+ *  20、添加设备
  *
  *  @param mac          设备的mac地址
  *  @param productID    设备的产品ID
@@ -319,7 +337,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)addDeviceWithMacAddress:(NSString *)mac withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  2、导入设备
+ *  21、导入设备
  *
  *  @param macArr      设备的mac地址的数组
  *  @param productID   设备的产品ID
@@ -329,7 +347,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)importDeviceWithMacAddressArr:(NSArray *)macArr withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  3、获取设备信息
+ *  22、获取设备信息
  *
  *  @param deviceID    设备ID
  *  @param productID   设备的产品ID
@@ -339,7 +357,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)getDeviceInfoWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  4、修改设备信息
+ *  23、修改设备信息
  *
  *  @param deviceID    设备ID
  *  @param dic         要修改的设备信息字典
@@ -350,7 +368,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)modifyDeviceInfoWithDeviceID:(NSNumber *)deviceID withInfoDic:(NSDictionary *)dic withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  5、查询设备列表
+ *  24、查询设备列表
  *
  *  @param productID   要查询的设备的产品ID
  *  @param accessToken 调用凭证
@@ -359,7 +377,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)queryDeviceListWithProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  6、删除设备
+ *  25、删除设备
  *
  *  @param deviceID    设备ID
  *  @param productID   设备的产品ID
@@ -369,7 +387,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)delDeviceWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  7、设置设备扩展属性
+ *  26、设置设备扩展属性
  *
  *  @param dic         属性字典
  *  @param deviceID    设备ID
@@ -380,17 +398,7 @@ typedef void (^MyBlock) (id result, NSError *err);
 +(void)setDevicePropertyDictionary:(NSDictionary *)dic withDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 /**
- *  8、获取设备扩展属性
- *
- *  @param deviceID    设备ID
- *  @param productID   设备的产品ID
- *  @param accessToken 调用凭证
- *  @param block       完成后的回调
- */
-+(void)getDevicePropertyWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
-
-/**
- *  9、修改设备扩展属性
+ *  27、修改设备扩展属性
  *
  *  @param dic         属性字典
  *  @param deviceID    设备ID
@@ -399,6 +407,16 @@ typedef void (^MyBlock) (id result, NSError *err);
  *  @param block       完成后的回调
  */
 +(void)modifyDevicePropertyDictionary:(NSDictionary *)dic withDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
+
+/**
+ *  28、获取设备扩展属性
+ *
+ *  @param deviceID    设备ID
+ *  @param productID   设备的产品ID
+ *  @param accessToken 调用凭证
+ *  @param block       完成后的回调
+ */
++(void)getDevicePropertyWithDeviceID:(NSNumber *)deviceID withProductID:(NSString *)productID withAccessToken:(NSString *)accessToken didLoadData:(MyBlock)block;
 
 
 #pragma mark
@@ -412,9 +430,10 @@ typedef void (^MyBlock) (id result, NSError *err);
  *  @param accessToken 调用凭证
  *  @param email       被分享的用户的email地址
  *  @param expire      分享消息的有效时间
+ *  @param mode        分享方式
  *  @param block       完成后的回调
  */
-+(void)shareDeviceWithDeviceID:(NSNumber *)deviceID withAccessToken:(NSString *)accessToken withShareAccount:(NSString *)account withExpire:(NSNumber *)expire didLoadData:(MyBlock)block;
++(void)shareDeviceWithDeviceID:(NSNumber *)deviceID withAccessToken:(NSString *)accessToken withShareAccount:(NSString *)account withExpire:(NSNumber *)expire withMode:(NSString *)mode didLoadData:(MyBlock)block;
 
 /**
  *  取消分享
