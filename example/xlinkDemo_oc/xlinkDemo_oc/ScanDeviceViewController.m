@@ -38,7 +38,6 @@
     NSArray *deviceArr = [[NSUserDefaults standardUserDefaults] arrayForKey:@"deviceList"];
     for (NSDictionary *deviceDic in deviceArr) {
         DeviceEntity *device = [[DeviceEntity alloc] initWithDictionary:deviceDic];
-        [[XLinkExportObject sharedObject] initDevice:device];
         [_deviceList addObject:device];
     }
     
@@ -196,42 +195,13 @@
 
 //手动添加设备
 -(void)addDeviceManual {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请输入设备MAC地址" message:@"MAC地址格式如: BBFE0A0B1234,12个字符,无冒号,无空格" preferredStyle:UIAlertControllerStyleAlert];
-    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"MAC地址";
-    }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        NSString * macInput = [alertController.textFields[0].text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        // 校验长度
-        if( macInput.length != 12 ) {
-            [self showWarningAlert:@"MAC地址格式如: BBFE0A0B1234,12个字符,无冒号,无空格。" didFinish:^{
-                [self addDeviceManual];
-            }];
-            return;
-        }
-        
-        // 找到不合法的字符
-        NSString *str = @"abcdefABCDEF1234567890";
-        for (NSUInteger i = 0; i < 12; i++) {
-            char c = str.UTF8String[i];
-            if (!(c >= 'a' && c <= 'f') && !(c >= 'A' && c <= 'F') && !(c >= '0' && c <= '9')) {
-                [self showWarningAlert:@"MAC地址格式如: BBFE0A0B1234,12个字符,无冒号,无空格。" didFinish:^{
-                    [self addDeviceManual];
-                }];
-                return;
-            }
-        }
-        
-        NSString *pid = [[NSUserDefaults standardUserDefaults] objectForKey:@"pid"];
-        DeviceEntity * xDevice = [[DeviceEntity alloc] initWithMac:macInput andProductID:pid];
-        [self addDevice:xDevice];
-        [self addDeviceCache:xDevice];
-    }];
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    [self presentViewController:alertController animated:true completion:nil];
+    DeviceEntity *device = [[DeviceEntity alloc] initWithMac:@"78b3b9000009" andProductID:@"160fa2aed1523200160fa2aed1523201"];
+    
+    device.version = 2;
+    device.accessKey = @(8888);
+    
+    [self addDevice:device];
+    [self addDeviceCache:device];
 }
 
 #pragma mark

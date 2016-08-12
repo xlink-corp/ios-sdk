@@ -83,22 +83,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "xlinkDemo_oc/AppDelegate.m"
-            timestampString = "486977013.543994"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "-application:didReceiveRemoteNotification:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "../../ios/xlinksdklib_v3/xlinksdklib/SDKlib/ExternalNetProtocol/SetExtPacket.m"
             timestampString = "486963164.456498"
             startingColumnNumber = "9223372036854775807"
@@ -147,28 +131,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../ios/xlinksdklib_v3/xlinksdklib/SDKlib/SenderEngine.m"
-            timestampString = "491128417.7537"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "964"
-            endingLineNumber = "964"
-            landmarkName = "-sendCloudSubscribeDevice:andAuthKey:andMessageID:andFlag:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "xlinkDemo_oc/ScanDeviceViewController.m"
-            timestampString = "491365784.988917"
+            timestampString = "492658411.599487"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "394"
-            endingLineNumber = "394"
+            startingLineNumber = "365"
+            endingLineNumber = "365"
             landmarkName = "-onSetDeviceAccessKey:"
             landmarkType = "5">
          </BreakpointContent>

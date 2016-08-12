@@ -494,7 +494,7 @@
  *
  *  @return 0 成功，其它失败
  */
--(int)initDevice:(DeviceEntity *)device;
+//-(int)initDevice:(DeviceEntity *)device;
 
 
 /**
