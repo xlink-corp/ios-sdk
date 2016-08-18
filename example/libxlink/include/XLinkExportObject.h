@@ -544,7 +544,7 @@
 /**
  *  清理SDK内的所有设备列表
  */
--(void)clearDeviceList;
+//-(void)clearDeviceList;
 
 
 
