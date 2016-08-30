@@ -494,7 +494,7 @@
  *
  *  @return 0 成功，其它失败
  */
--(int)initDevice:(DeviceEntity *)device;
+//-(int)initDevice:(DeviceEntity *)device;
 
 
 /**
@@ -544,7 +544,7 @@
 /**
  *  清理SDK内的所有设备列表
  */
--(void)clearDeviceList;
+//-(void)clearDeviceList;
 
 
 

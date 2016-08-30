@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define CorpId @"100fa2aea278ca00"
+#define CorpId @"100fa2aed14f9400"
 #define APN_APP_ID @"2e07d2ad3c33aa00"
 
 #define CustomErrorDomain @"cn.xlink.httpRequest"  //正式服务器

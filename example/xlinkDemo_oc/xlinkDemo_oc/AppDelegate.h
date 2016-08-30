@@ -29,7 +29,7 @@
 #define kOnLocalDataPoint2Update        @"kOnLocalDataPoint2Update"
 #define kOnCloudDataPoint2Update        @"kOnCloudDataPoint2Update"
 
-#define productId       @"160fa2af1082d000160fa2af1082d001"
+#define productId       @"1607d2ad165ac4001607d2ad165ac401"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
