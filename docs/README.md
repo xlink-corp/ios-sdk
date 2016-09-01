@@ -197,7 +197,7 @@
 4. 在自定义Application 下的onCreate()函数调用XlinkAgent.init进行SDK初始化
 
 	**Android 代码范例**
-	
+
 	```
 	// 初始化sdk
 	 XlinkAgent.init(this);
@@ -244,9 +244,9 @@
 1. **用户注册**
 
 	可通过手机或者邮箱在云智易平台下注册成为一个云智易用户。通过账号和密码进行认证获得一个有效的调用凭证，即可通过调用凭证使用云智易用户相关的RESTful接口。
-	
+
 	**URL：/v2/user_register**
-	
+
 	[Http RESTful接口文档参见《用户身份接口》](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E6%8E%A5%E5%8F%A3.md)
 
 	**注：使用邮箱注册用户后，系统会往注册的邮箱发送一封认证激活邮件，需要查看邮件并点击邮箱中的链接进行账号激活后才能正常使用账号。**
