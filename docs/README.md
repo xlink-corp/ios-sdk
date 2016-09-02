@@ -15,10 +15,15 @@
     - [Setp6 连接设备](#setp6)
     - [Setp7 设备控制 & 接收设备数据](#setp7)
 - [三、API文档](#api)
-	- [3.1 概述](#3.1 概述)
-	- [3.2 接口介绍](#3.2 接口介绍)
-	- [3.3 常见问题](#3.3 常见问题)
-	- [3.4 附录](#3.4 附录)
+	- [3.1 概述](#step3.1)
+	- [3.2 接口介绍](#step3.2)
+	   -     [3.2.1 设备信息类XDevice介绍](#step3.2.1)    
+	   -    [3.2.2 Android SDK功能函数](#step3.2.2)
+      -    [3.2.3 Android 设备操作函数](#step3.2.3)
+      -    [3.2.4 XlinkNetListener 回调说明](#step3.2.4)
+      -    [3.2.5 DeviceEntity属性说明代理回调说明](#step3.2.5)
+	- [3.3 常见问题](#step3.3)
+	- [3.4 附录](#step3.4)
 - [四、设备分享](#四、设备分享)
 	- [4.1、功能描述](#4.1、功能描述)
 	- [4.2、分享流程](#4.2、分享流程)
@@ -197,7 +202,7 @@
 4. 在自定义Application 下的onCreate()函数调用XlinkAgent.init进行SDK初始化
 
 	**Android 代码范例**
-
+	
 	```
 	// 初始化sdk
 	 XlinkAgent.init(this);
@@ -244,9 +249,9 @@
 1. **用户注册**
 
 	可通过手机或者邮箱在云智易平台下注册成为一个云智易用户。通过账号和密码进行认证获得一个有效的调用凭证，即可通过调用凭证使用云智易用户相关的RESTful接口。
-
+	
 	**URL：/v2/user_register**
-
+	
 	[Http RESTful接口文档参见《用户身份接口》](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD%E6%8E%A5%E5%8F%A3.md)
 
 	**注：使用邮箱注册用户后，系统会往注册的邮箱发送一封认证激活邮件，需要查看邮件并点击邮箱中的链接进行账号激活后才能正常使用账号。**
@@ -553,7 +558,7 @@ SDK
               //发送数据成功
         }
 	```
-
+	
 	```
    //发送成功后再收到设备相应时回回调
     private SendPipeListener pipeListener = new SendPipeListener() {
@@ -605,29 +610,110 @@ SDK
 ##三、<a name="api">API文档</a>
 
 
-- [3.1 概述](#3.1 概述)
-- [3.2 接口介绍](#3.2 接口介绍)
-- [3.3 常见问题](#3.3 常见问题)
-- [3.4 附录](#3.4 附录)
+- [3.1 概述](#step3.1)
+- [3.2 接口介绍](#step3.2)
+   -    [3.2.1 设备信息类XDevice介绍](#step3.2.1)
+   -    [3.2.2 Android SDK功能函数](#step3.2.2)
+      -         [void init(Context mContext)](#init)  
+       -         [int start() ] (#start)
+       -         [int login(int user_id, String app_key)](#login)
+       -         [void setPreInnerServiceMode(boolean pre)](#setPreInnerServiceMode)
+       -         [boolean initDevice(XDevice device)](#initDevice)
+       -         [void setSSL(String KeystorepathTrust, String password)](#setSSL)
+       -         [XDevice JsonToDevice(JSONObject jsonObject)](#JsonToDevice)
+       -         [JSONObject   deviceToJson(XDevice device)](#deviceToJson)
+       -         [void  stop()](#stop)
+       -         [void addXlinkListener(XlinkNetListener listener)](#addXlinkListener)
+       -         [void debug(boolean debug)](#debug)
+       -         [boolean isConnectedOuterNet()](#isConnectedOuterNet)
+       -         [boolean isConnectedLocal()](#isConnectedLocal)
+   -    [3.2.3 Android 设备操作函数](#step3.2.3)
+      
+       -   [扫描网关设备  int scanDeviceByProductID(String productId,ScanDeviceListener listener) ](#scanDeviceByProductID)
+       -   [设置设备授权码 int setDeviceAccessKey(XDevice device, final int accessKey, final SetDeviceAccessKeyListener listener)](#setDeviceAccessKey)
+       -   [获取设备的subscribeKey int getDeviceSubscribeKey(XDevice device, final int accessKey, final GetSubscribeKeyListener listener)](#getDeviceSubscribeKey)
+       -   [连接设备 int connectDevice(XDevice device,final int accessKey,int subkey, ConnectDeviceListener connectListener)](#connectDevicev3)
+       - [连接设备 connectDevice(XDevice device, final String auth, final ConnectDeviceListener connectListener)](#connectDevicev1)  
+       -  [连接设备 connectDevice(XDevice device, final int accessKey, final ConnectDeviceListener connectListener)](#connectDevicev2)
+       -  [连接设备 int connectDevice(XDevice device, ConnectDeviceListener connectListener)](#connectDevicev32)
+       -  [设置数据端点 int setDataPoint(XDevice xdevice, List< DataPiont > dataPionts,SetDataPointListener listener)](#setDataPoint)
+       -  [订阅设备 int subscribeDevice(XDevice device, int subKey, SubscribeDeviceListener listener)](#subscribeDevicev3)
+       -  [订阅设备 int subscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)](#subscribeDevicev1)
+       -  [取消订阅 int unsubscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)](#unsubscribeDevicev1)
+       -  [取消订阅设备 int unsubscribeDevice(XDevice device, int accessKey, SubscribeDeviceListener listener)](#unsubscribeDevicev2)
+       -  [修改本地accessKey int setLocalDeviceAccessKey(XDevice device, int accessKey, SetDeviceAccessKeyListener listener)](#setLocalDeviceAccessKey)
+       -  [探测设备是否在线 int sendProbe(XDevice device)](#sendProbe)
+       -  [本地发送数据透传 （非云端，局域网直连设备）int sendLocalPipeData(XDevice device, byte flag, byte[] data, int timeOut, SendPipeListener listener) ](#sendLocalPipeData)
+       -  [本地列表移除设备 int removeDevice(XDevice xDevice)](#removeDevice)
+       -  [ 本地列表移除设备 int removeDevice(String mac)](#removeDeviceByMac)
+       -  [本地列表移除所有设备 int removeAllDevice()](#removeAllDevice)
+       -  [向设备发送透传数据 int sendPipeData(XDevice device, byte[] data, SendPipeListener listener)](#sendPipeData1)
+       -  [向设备发送透传数据 int sendPipeData(XDevice device, byte[] data, int timeOut,SendPipeListener listener)](#sendPipeData2)
+   
+   -    [3.2.4 XlinkNetListener 回调说明](#step3.2.4)
+       -  [内网连接回调 onStart(int code)](#onStart) 
+       -  [外网连接回调 onLogin(int code)](#onLogin)
+       -  [SDK断开连接回调 onDisconnect(int code)](#onDisconnect)
+       -  [SDK本地连接断开回调 onLocalDisconnect(int code)](#onLocalDisconnect)
+       -  [SDK 透传数据回调 onRecvPipeData(XDevice device, byte flags, byte[] data)](#onRecvPipeData) 
+       -  [SDK 云端透传数据 onRecvPipeSyncData(XDevice device, byte flags, byte[] data)](#onRecvPipeSyncData)
+       -  [数据端点更新回调 onDataPointUpdate(XDevice xDevice, List < DataPiont > dataPionts)](#onDataPointUpdate)
+       -  [设备状态改变回调 onDeviceStateChanged(XDevice xdevice, int state)](#onDeviceStateChanged)
+       -  [设备、云端通知和告警回调 onEventNotify(EventNotify eventNotify)](#onEventNotify)
+   -    [3.2.5 DeviceEntity属性说明代理回调说明](#step3.2.5)
+- [3.3 常见问题](#step3.3)
+- [3.4 附录](#step3.4)
 
 
-### 3.1 概述
+### <a name="step3.1">3.1 概述</a>
 
 云智易App sdk 帮助开发者基于android、iOS系统上开发App和xlink模块智能设备进行设备管理和通讯。
 SKD封装的过程包括设备发现、连接、控制、心跳、状态上报、推送报警、通知等。
 使用SDK可以简化开发者接入云智易物联网平台的开发工作量，专注企业业务功能的开发。
 
-### 3.2 接口介绍
+### <a name="step3.2"> 3.2 接口介绍</a>
 APP接口分为三大部分
 - Android SDK  封装用于Android开发环境和Android系统的设备管理和设备通讯功能接口。
 - iOS SDK 封装用于XCODE开发环境和iOS系统的设备管理和设备通讯功能接口。
 - Http RESTful接口 用于设备订阅、设备分享、设备权限管理、数据存储等设备通讯之外的其他云端服务。为了简化Http接口调用，Android透传Demo源码中提供了HttpManage类供开发者使用，需要替换HttpManage.COMPANY_ID为注册的企业ID。
 
-#### 3.2.1 Android SDK功能函数：
+#### <a name="step3.2.1">3.2.1 设备信息类XDevice介绍</a>
+  XDevice 是SDK保存设备的信息的类，由SDK封装与具体设备连接、通信的必需的设备信息的对象，XDevice对象可以通过xlinkAgent的scanDeviceByProductId方法进行局域网设备的扫描，从而获得具体设备的XDevice对象,也可以通过调用HTTP接口的获取订阅设备列表进行获取相关的订阅的设备的信息，然后通过一定的数据结构，并调用AxlinkAgent的jsonToDevice方法进行转换获取相应地XDevice对象，具体的使用参考3.2.2AndroidSDK功能函数，以下是XDevice的属性的介绍：
+  
+
+**属性：**
+
+| 属性 |获取方式| 说明 |
+| --- |---| --- |
+|address |xdevice.getAddress()| 内网的ip地址|
+| version|xdevice.getVersion()|设备的版本号|
+| mac    |xdevice.getMacAddress()|设备的mac地址|
+|port |xdevice.getPort()|设备监听的端口|
+|deviceId|xdevice.getDeviceId()|设备在公网注册的id|
+|deviceName|xdevice.getDeviceName()|设备名称|
+|productId|xdevice.getProductId()|设备的产品id|
+| mcuHardVersion|xdevice.getMcuHardVersion()|设备硬件版本|
+| mcuSoftVersion|xdevice.getMcuSoftVersion()|设备软件版本|
+| authkey|xdevice.getAuthkey()|设备授权码(v3版本已弃用，用acessKey替代)|
+| accessKey|xdevice.getAcessKey()|设备授权码|
+| subKey|xdevice.getSubKey()|设备订阅授权码|
+| productType|xdevice.getProductType()|设备类型|
+
+
+**说明：**
+XDevice对象属性获取时有些是非必需属性，所以可能部分项目通过扫描或者订阅获取的XDevice有些属性为空，视具体项目的设备固件返回信息而定。
+
+
+
 
 _ _ _
 
-##### void init(Context mContext)
+
+#### <a name="step3.2.2">3.2.2 Android SDK功能函数</a>
+
+_ _ _
+
+##### <a name="init">void init(Context mContext)</a>
 **方法说明：**
 
 * 初始化xlink sdk,使用sdk前，必须调用
@@ -644,7 +730,7 @@ _ _ _
 
 _ _ _
 
-##### int start()
+##### <a name="start">int start()</a>
 
 **方法说明：**
 
@@ -671,7 +757,7 @@ _ _ _
 
 _ _ _
 
-##### int login(int user_id, String app_key)
+##### <a name="login>int login(int user_id, String app_key)</a>
 
 **方法说明：**
 
@@ -707,7 +793,7 @@ _ _ _
 
 _ _ _
 
-##### void setPreInnerServiceMode(boolean pre)
+##### <a name="setPreInnerServiceMode">void setPreInnerServiceMode(boolean pre)</a>
 
 **方法说明：**
 * 向SDK设置优先进行内网连接,默认不使用优先内网连接
@@ -726,7 +812,7 @@ _ _ _
    无返回值
 _ _ _
 
-##### boolean initDevice(XDevice device)
+##### <a name="initDevice">boolean initDevice(XDevice device)</a>
 
 **方法说明：**
 
@@ -756,7 +842,7 @@ _ _ _
 
 _ _ _
 
-##### void setSSL(String KeystorepathTrust, String password)
+##### <a name="setSSL">void setSSL(String KeystorepathTrust, String password)</a>
 
 **方法说明：**
 
@@ -781,7 +867,7 @@ _ _ _
 
 _ _ _
 
-##### XDevice JsonToDevice(JSONObject jsonObject)
+##### <a name="JsonToDevice">XDevice JsonToDevice(JSONObject jsonObject)</a>
 
 **方法说明：**
 
@@ -795,7 +881,40 @@ _ _ _
 
 **调用示例：**
 
-    XDevice xdevice = XlinkAgent.JsonToDevice(json);
+   如果是通过Http的获取订阅列表的接口获取的订阅设备相关数据，其返回格式为：
+   
+     
+     [{"is_online":true,"product_id":"160fa2ad2e193e00160fa2ad2e193e01","            is_active":true,"active_code":"1e0fa2ad3c417400","mcu_mod":"0","mcu_version":0,"firmware_mod":"1","mac":"ACCF238E4204",            "active_date":"2016-01-20T09:15:01.00Z","last_login":"2016-01-20T16:24:57.788Z","id":452872161,            "authorize_code":"1e0fa2ad3c417400","firmware_version":1,"role":1,"access_key":0},            {"is_online":true,"product_id":"160fa2ad2e193e00160fa2ad2e193e01",            "is_active":true,"active_code":"1e0fa2ad3bfed000","mcu_mod":"0","mcu_version":0,"firmware_mod":"1",            "mac":"ACCF238E7EA0","active_date":"2016-01-19T18:28:24.00Z","last_login":"2016-01-20T16:24:24.366Z",            "id":452875703,"authorize_code":"1e0fa2ad3bfed000","firmware_version":1,"role":0,"access_key":755660671}]
+            
+            
+  那么可以通过转换成
+  {"protocol":1
+                       "device":{
+                       "macAddress":"MAC地址",
+                        "deviceID":设备ID,
+                        "version":SDK版本号,
+                        "mcuHardVersion":硬件版本号,
+                        "mucSoftVersion":MCU软件版本号,
+                        "productID":"产品ID",
+                        "accesskey":accesskey
+                        }}
+                        的Json格式，然后封装成JSONObject对象，再调用
+                        
+         XDevice xdevice=XlinkAgent.JsonToDevice(json);
+         
+         
+       
+  获得XDevice对象，其示例代码如下：
+  
+          //subscribeDevice为获取设备订阅列表接口返回的数据的封装类
+          int mcuhardversion = subscribeDevice.getMcu_version();                        int wifihardversion = subscribeDevice.getFirmware_version();                        int mcufirmwareversion = subscribeDevice.getMcu_version();                        String mac = subscribeDevice.getMac();                        String pid = subscribeDevice.getProduct_id();                        int deviceid = subscribeDevice.getId();                        int accessKey = subscribeDevice.getAccess_key();                        JSONObject json = new JSONObject();                        try {                            json.put("protocol", 1);                            JSONObject deviceJson = new JSONObject();                            deviceJson.put("macAddress", mac);                            deviceJson.put("deviceID", deviceid);                            deviceJson.put("version", 2);//固件版本是2的新固件，返回的是1，这里强制改为2，不强制修改会导致第一次连接设备认证失败                            deviceJson.put("mcuHardVersion", mcuhardversion);                            deviceJson.put("mucSoftVersion", mcufirmwareversion);                            deviceJson.put("productID", pid);                            deviceJson.put("accesskey", accessKey);                            json.put("device", deviceJson);                            XDevice xdevice = XlinkAgent.JsonToDevice(json);
+                            }catch(Exception e){
+                            e.printTraceStack();
+                            }
+                            
+                            
+                            
+     
 
 **返回值：**
 
@@ -806,12 +925,25 @@ _ _ _
 
 _ _ _
 
-##### JSONObject   deviceToJson(XDevice device)
+##### <a name="deviceToJson">JSONObject   deviceToJson(XDevice device)</a>
 
 **方法说明：**
 
 * 如果需要存储设备，通过此接口把device序列话成JSONObject对象，然后存储
+* 返回Xlink可识别设备
 
+ {"protocol":1
+                       "device":{
+                       "macAddress":"MAC地址",
+                        "deviceID":设备ID,
+                        "version":SDK版本号,
+                        "mcuHardVersion":硬件版本号,
+                        "mucSoftVersion":MCU软件版本号,
+                        "productID":"产品ID",
+                        "accesskey":accesskey
+                        }}
+                        的JsonObject对象
+                        
 **调用示例：**
 
     JSONObject mObj = XlinkAgent.deviceToJson(device);
@@ -824,7 +956,7 @@ _ _ _
 
 _ _ _
 
-##### void  stop()
+##### <a name="stop">void  stop()</a>
 
 **方法说明：**
 
@@ -838,7 +970,7 @@ _ _ _
 
 _ _ _
 
-##### void addXlinkListener(XlinkNetListener listener)
+##### <a name="addXlinkListener">void addXlinkListener(XlinkNetListener listener)</a>
 
 **方法说明：**
 
@@ -855,7 +987,7 @@ _ _ _
 | listener | SDK回调监听
 _ _ _
 
-##### void debug(boolean debug)
+##### <a name="debug">void debug(boolean debug)</a>
 
 **方法说明：**
 
@@ -870,7 +1002,7 @@ _ _ _
 | debug | 是否打印debug日志
 _ _ _
 
-##### boolean isConnectedOuterNet()
+##### <a name="isConnectedOuterNet">boolean isConnectedOuterNet()</a>
 
 **方法说明：**
 
@@ -890,7 +1022,7 @@ _ _ _
 _ _ _
 
 
-##### boolean isConnectedLocal()
+##### <a name="isConnectedLocal">boolean isConnectedLocal()</a>
 
 **方法说明：**
 
@@ -909,10 +1041,10 @@ _ _ _
 
 _ _ _
 
-#### 3.2.2 Android 设备操作函数
+#### <a name="step3.2.3">3.2.3 Android 设备操作函数</a>
 
-
-##### 扫描网关设备  int scanDeviceByProductID(String productId,ScanDeviceListener listener)
+####<a name="scanDeviceByProductID"> 扫描网关设备 </a>
+##### int scanDeviceByProductID(String productId,ScanDeviceListener listener)
 
 **方法说明：**
 
@@ -963,7 +1095,7 @@ XlinkCode 对应常量| 值 | 说明 |
 
 _ _ _
 
-设置设备授权码
+####<a name="setDeviceAccessKey">设置设备授权码</a>
 ##### int setDeviceAccessKey(XDevice device, final int accessKey, final SetDeviceAccessKeyListener listener)
 
 **方法说明：**
@@ -994,7 +1126,7 @@ _ _ _
 
 _ _ _
 
-获取设备的subscribeKey
+####<a name="getDeviceSubscribeKey">获取设备的subscribeKey</a>
 ##### int getDeviceSubscribeKey(XDevice device, final int accessKey, final GetSubscribeKeyListener listener)
 
 **方法说明：**
@@ -1037,6 +1169,7 @@ _ _ _
 
 _ _ _
 
+####<a name="connectDevicev3">连接设备</a>
 #####  int connectDevice(XDevice device,final int accessKey,int subkey, ConnectDeviceListener connectListener)
 
 **方法说明：**
@@ -1117,7 +1250,7 @@ _ _ _
 | --- | --- |
 | XDevice | Device实体兑现 | 
 | accessKey | 设备授权码 | 
-| subKey | 订阅授权码 ，可以在内网通过getSubscribeKey（）方法获取| 
+| subKey | 订阅授权码 | 
 | connectListener | 监听器 | 
 
 **返回值：**
@@ -1138,7 +1271,7 @@ _ _ _
 
 _ _ _
 
-连接设备
+####<a name="connectDevicev1">连接设备</a>
 #####  connectDevice(XDevice device, final String auth, final ConnectDeviceListener connectListener)
 **方法说明：**
 
@@ -1172,7 +1305,7 @@ _ _ _
 
 - - -
 
-连接设备
+####<a name="connectDevicev2">连接设备</a>
 #####  connectDevice(XDevice device, final int accessKey, final ConnectDeviceListener connectListener)
 **方法说明：**
 
@@ -1207,7 +1340,7 @@ _ _ _
 
 - - -
 
-连接设备
+####<a name="connectDevicev32">连接设备</a>
 #####int connectDevice(XDevice device, ConnectDeviceListener connectListener)
 **方法说明：**
 
@@ -1239,13 +1372,13 @@ _ _ _
 
 - - -
 
-设置数据端点
+####<a name="setDataPoint">设置数据端点</a>
 ##### int setDataPoint(XDevice xdevice, List< DataPiont > dataPionts,SetDataPointListener listener)
 
 **方法说明：**
 
 * 设置设备的数据端点
-* **V2版本SDK已废弃数据端点功能，V3版本SDK添加了以上方法**
+* **V3版本新增方法**
 
 **参数：**
 
@@ -1268,15 +1401,15 @@ _ _ _
 _ _ _
 
 
-
-#####订阅设备 int subscribeDevice(XDevice device, int subKey, SubscribeDeviceListener listener)
+####<a name="subscribeDevicev3">订阅设备</a>
+##### int subscribeDevice(XDevice device, int subKey, SubscribeDeviceListener listener)
 
 **方法说明：**
 
 * 订阅设备(必须有公网环境)(如果在公网环境下使用
 * 公网环境调用 XlinkAgent.getInstance().connectDevice()会自动调用该函数;
 * 设备端重置设备密码后，订阅关系会清空
-* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[http://support.xlink.cn/hc/kb/article/89925/](http://support.xlink.cn/hc/kb/article/89925/)
+* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[设备功能接口](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E8%AE%BE%E5%A4%87%E5%8A%9F%E8%83%BD%E6%8E%A5%E5%8F%A3.md)
 
 **参数：**
 
@@ -1300,17 +1433,16 @@ _ _ _
 
 _ _ _
 
-
-#####订阅设备 int subscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)
+####<a name="subscribeDevicev1">订阅设备</a>
+#####int subscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)
 
 **方法说明：**
 
-* **V3版本SDK已废弃数据端点功能，V3版本SDK添加了以上方法**
+* **V3版本SDK已废弃该方法，新增int subscribeDevice(XDevice device, int subKey, SubscribeDeviceListener listener)替代**
 * 订阅设备(必须有公网环境)(如果在公网环境下使用
 * 公网环境调用 XlinkAgent.getInstance().connectDevice()会自动调用该函数;
 * 设备端重置设备密码后，订阅关系会清空
-* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[http://support.xlink.cn/hc/kb/article/89925/](http://support.xlink.cn/hc/kb/article/89925/)
-
+* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[设备功能接口](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E8%AE%BE%E5%A4%87%E5%8A%9F%E8%83%BD%E6%8E%A5%E5%8F%A3.md)
 **参数：**
 
 | 参数 | 说明 |
@@ -1334,18 +1466,16 @@ _ _ _
 _ _ _
 
 
-
-#####取消订阅设备 int unsubscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)
+####<a name="unsubscribeDevicev1">取消订阅设备</a>
+#####int unsubscribeDevice(XDevice device, String authCode, SubscribeDeviceListener listener)
 
 **方法说明：**
 
-* **V3版本SDK已废弃数据端点功能，V3版本SDK添加了以上方法**
 * **V3版本建议使用http接口进行设备的取消订阅操作,接口如下**
 * 订阅设备(必须有公网环境)(如果在公网环境下使用
 * 公网环境调用 XlinkAgent.getInstance().connectDevice()会自动调用该函数;
 * 设备端重置设备密码后，订阅关系会清空
-* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[http://support.xlink.cn/hc/kb/article/89925/](http://support.xlink.cn/hc/kb/article/89925/)
-
+* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[设备功能接口](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E8%AE%BE%E5%A4%87%E5%8A%9F%E8%83%BD%E6%8E%A5%E5%8F%A3.md)
 **参数：**
 
 | 参数 | 说明 |
@@ -1368,17 +1498,16 @@ _ _ _
 
 _ _ _
 
-#####取消订阅设备 int unsubscribeDevice(XDevice device, int accessKey, SubscribeDeviceListener listener)
+####<a name="unsubscribeDevicev2">取消订阅设备</a>
+##### int unsubscribeDevice(XDevice device, int accessKey, SubscribeDeviceListener listener)
 
 **方法说明：**
 
-* **V3版本SDK已废弃数据端点功能，V3版本SDK添加了以上方法**
 * **V3版本建议使用http接口进行设备的取消订阅操作,接口如下**
 * 订阅设备(必须有公网环境)(如果在公网环境下使用
 * 公网环境调用 XlinkAgent.getInstance().connectDevice()会自动调用该函数;
 * 设备端重置设备密码后，订阅关系会清空
-* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[http://support.xlink.cn/hc/kb/article/89925/](http://support.xlink.cn/hc/kb/article/89925/)
-
+* 解除订阅关系请调用HTTP接口(/v2/user/{user_id}/unsubscribe) 参考:[设备功能接口](https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/%E5%BA%94%E7%94%A8%E7%AB%AFRESTful%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E8%AE%BE%E5%A4%87%E5%8A%9F%E8%83%BD%E6%8E%A5%E5%8F%A3.md)
 **参数：**
 
 | 参数 | 说明 |
@@ -1400,7 +1529,8 @@ _ _ _
 
 _ _ _
 
-#####修改本地accessKey int setLocalDeviceAccessKey(XDevice device, int accessKey, SetDeviceAccessKeyListener listener)
+####<a name="setLocalDeviceAccessKey">修改本地accessKey</a>
+##### int setLocalDeviceAccessKey(XDevice device, int accessKey, SetDeviceAccessKeyListener listener)
 
 **方法说明：**
 
@@ -1424,11 +1554,11 @@ _ _ _
 
 **结果回调：**
 
-	SetDeviceAccessKeyListener 对象的onSetLocalDeviceAccessKey(XDevice device, int code, int messageId)
+	SetDeviceAccessKeyListener .onSetLocalDeviceAccessKey(XDevice device, int code, int messageId)
 
 _ _ _
 
-探测设备是否在线
+####<a name="sendProbe">探测设备是否在线</a>
 ####int sendProbe(XDevice device)
 
 **方法说明：**
@@ -1452,8 +1582,8 @@ _ _ _
 
 _ _ _
 
-
-#####本地发送数据透传 （非云端，局域网直连设备） int sendLocalPipeData(XDevice device, byte flag, byte[] data, int timeOut, SendPipeListener listener)
+####<a name="sendLocalPipeData">本地发送数据透传 （非云端，局域网直连设备）</a>
+##### int sendLocalPipeData(XDevice device, byte flag, byte[] data, int timeOut, SendPipeListener listener)
 
 **方法说明：**
 
@@ -1478,11 +1608,12 @@ _ _ _
 
 **结果回调：**
 
-	SendPipeCallbackListener 对象的void onSendLocalPipeData(XDevice device, int code, int messageId)
+	SendPipeCallbackListener .onSendLocalPipeData(XDevice device, int code, int messageId)
 
 _ _ _
 
-####本地列表移除设备  int removeDevice(XDevice xDevice)
+####<a name="removeDevice">本地列表移除设备</a>
+#####  int removeDevice(XDevice xDevice)
 
 **方法说明：**
 
@@ -1501,7 +1632,8 @@ _ _ _
 
 - - -
 
-####本地列表移除设备  int removeDevice(String mac)
+####<a name="removeDeviceByMac">本地列表移除设备</a>
+#####  int removeDevice(String mac)
 
 **方法说明：**
 
@@ -1520,7 +1652,8 @@ _ _ _
 
 - - -
 
-####本地列表移除所有设备  int removeAllDevice()
+####<a name="removeAllDevice">本地列表移除所有设备</a>
+#####  int removeAllDevice()
 
 **方法说明：**
 
@@ -1532,7 +1665,7 @@ _ _ _
 
 - - -
 
-向设备发送透传数据
+####<a name="sendPipeData1">向设备发送透传数据</a>
 ##### int sendPipeData(XDevice device, byte[] data, SendPipeListener listener)
 
 **方法说明：**
@@ -1606,11 +1739,12 @@ _ _ _
 
 **结果回调：**
 
-	onSendPipeData
+	SendPipeCallbackListener.onSendPipeData(XDevice device, int code, int messageId)
 	
 	
 	- - -
 
+####<a name="sendPipeData2">向设备发送透传数据</a>
 ##### int sendPipeData(XDevice device, byte[] data, int timeOut,SendPipeListener listener)
 
 **方法说明：**
@@ -1640,11 +1774,11 @@ _ _ _
 
 **结果回调：**
 
-	onSendPipeData
+		SendPipeCallbackListener.onSendPipeData(XDevice device, int code, int messageId)
 
-#### 3.2.3 XlinkNetListener 回调说明：
+#### <a name="step3.2.4">3.2.4 XlinkNetListener 回调说明</a>
 
-##### onStart(int code)
+##### <a name="onStart">onStart(int code)</a>
 
 **方法说明：**
 
@@ -1658,7 +1792,7 @@ XlinkCode常量 | int实际值 | 说明
 `LOCAL_CONNECT_ERROR`|-1	|绑定端口失败
 ...|...|...
 
-##### onLogin(int code)
+##### <a name="onLogin">onLogin(int code)</a>
 
 **方法说明：**
 
@@ -1678,7 +1812,7 @@ XlinkCode 常量|int实际值|说明|
 `SERVER_CODE_SERVER_ERROR`|4|服务器内部错误
 ... | ...	| ...
 
-##### onDisconnect(int code)
+##### <a name="onDisconnect">onDisconnect(int code)</a>
 
 **方法说明：**
 
@@ -1694,7 +1828,7 @@ XlinkCode 常量|int实际值|说明|
 | `CLOUD_USER_EXTRUSION` | -4 | 该用户在其他地方登录(提示用户，帐号被挤) |
 
 
-##### onLocalDisconnect(int code);
+##### <a name="onLocalDisconnect">onLocalDisconnect(int code)</a>
 
 **方法说明：**
 
@@ -1708,7 +1842,7 @@ XlinkCode 常量|int实际值|说明|
 | `LOCAL_SERVICE_KILL` | -2 | XlinkUdpServrce服务被异常杀死（如360等安全软件),需要重新调用start函数。 |
 | ... | ... | ... |
 
-##### onRecvPipeData(XDevice device, byte flags, byte[] data);
+##### <a name="onRecvPipeData">onRecvPipeData(XDevice device, byte flags, byte[] data)</a>
 
 **方法说明：**
 
@@ -1722,7 +1856,7 @@ XlinkCode 常量|int实际值|说明|
 |flags|标识|
 | data | byte数据
 
-##### onRecvPipeSyncData(XDevice device, byte flags, byte[] data);
+##### <a name="onRecvPipeSyncData">onRecvPipeSyncData(XDevice device, byte flags, byte[] data)</a>
 
 **方法说明：**
 
@@ -1736,7 +1870,7 @@ XlinkCode 常量|int实际值|说明|
 |flags|标识|
 | data | byte数据
 
-##### onDataPointUpdate(XDevice xDevice, List < DataPiont > dataPionts);
+##### <a name="onDataPointUpdate">onDataPointUpdate(XDevice xDevice, List < DataPiont > dataPionts)</a>
 
 **方法说明：**
 
@@ -1762,7 +1896,7 @@ DP_TYPE_STRING|6|string
 DP_TYPE_BYTEARRAY|7|byte[]字节数组
 
 
-##### onDeviceStateChanged(XDevice xdevice, int state);
+##### <a name="onDeviceStateChanged">onDeviceStateChanged(XDevice xdevice, int state)</a>
 
 **方法说明：**
 
@@ -1783,7 +1917,7 @@ DEVICE_CHANGED_OFFLINE|	-2|	设备掉线
 DEVICE_CHANGED_CONNECT_SUCCEED|	-3|	设备重新连接成功
 ...|	...|	...
 
-##### onEventNotify(EventNotify eventNotify);
+##### <a name="onEventNotify">onEventNotify(EventNotify eventNotify)</a>
 
 **方法说明：**
 
@@ -1804,22 +1938,17 @@ DEVICE_CHANGED_CONNECT_SUCCEED|	-3|	设备重新连接成功
      * bit4-7:预留 Reserved
  * formId :发送者ID 如果是服务端发送的消息, id为0
 	 * messageType:
- 	    * 1:设备端点变化发送的通知
-    	* 2:设备端点变化引起的警报
-    	* 3:设备管理员推送的分享消息
-     	* 4:厂商推送的消息广播
-     	* 5:设备属性变化通知
+ 	    * 1:设备端点变化发送的通知 JSON{”index" : 0,”value" : 100,“msg”: 管理台设置的报警内容}
+    	* 2:设备端点变化引起的警报JSON{"index" : 0,"value" : 100,“msg”: 管理台设置的报警内容}
+    	* 3:设备管理员推送的分享消息JSON{“device_id” : 123457,”invite_code” : 12345,“type”:0/1/2/3}type:0 分享请求;1 接受分享;2 拒绝分享;3 分享被取消
+     	* 4:厂商推送的消息广播JSON{"msg_type": "txt","action_type": "url/command","url": "http://xxxx.xxx.xxx","command": "xxxx","title": "xxxx","content": "xxxxx"}
+     	* 5:设备属性变化通知JSON{"device_id" : 123456789,"type" : "info/prop"}type:info 设备基本属性变化 prop 设备扩展属性变化
+     	* 6:用户和设备订阅关系发生变化通知JSON{"device_id" : 123456789,"sub" : 0/1}sub：0 订阅关系取消 1 订阅关系建立
+     	* 7:设备在线状态变化引发的通知 JSON{"device_id" : 123456789,"state" : 0 / 1}state: 0 离线 1 上线
+     	* 8:设备在线状态变化引发的告警 JSON{"device_id" : 123456789,"state" : 0 / 1}state:0 离线 1 上线
+
   * 当 messageType=1 or 2 时,
      * notifyData: 前2个字节为字符串长度,后面的所有数据为UTF8格式的字符串
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2520,7 +2649,7 @@ device | 设备实体
 
 > 纯透传APP，该功能用不到；
 
-#### 3.2.4 DeviceEntity属性说明代理回调说明
+#### <a name="step3.2.5">3.2.5 DeviceEntity属性说明代理回调说明</a>
 
 APP开发者只用关心几个属性即可；
 
@@ -2563,7 +2692,7 @@ APP开发者只用关心几个属性即可；
 
 	获取设备内网的通讯地址，如果设备是公网设备，将返回空；
 
-### 3.3 常见问题
+### <a name="step3.3">3.3 常见问题</a>
 - Q:连接不上设备
 A:请检查设备是否在线；请检查是都将设备初始化到SDK。
 
@@ -2581,7 +2710,7 @@ A: 在云端配置或者设备实现通过云端推送数据需要实现XlinkNet
 
 - Q：启动调用连接和控制设备调用失败
 A: 查看是否已经调用login方法，并SDK进行了OnLogin的成功回调
-### 3.4 附录
+### <a name="step3.4>3.4 附录</a>
 
 **设备和用户的关系:**
 
