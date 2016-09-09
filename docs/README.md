@@ -233,11 +233,18 @@
 
 **IOS**
 
-1. 挂接delegate：	需要一个全局的对象作为XLINKShareObject的delegate接收器，一般情况下，我们会把App的AppDelegate作为全局delegate，如图：
+1. 设置连接的服务器地址与服务器端口号
+
+	```
+	[[XLinkExportObject sharedObject] setSDKProperty:@"cm2.xlink.cn" withKey:PROPERTY_CM_SERVER_ADDR];
+    [[XLinkExportObject sharedObject] setSDKProperty:@(23778) withKey:PROPERTY_CM_SERVER_PORT];
+	```
+
+2. 挂接delegate：	需要一个全局的对象作为XLINKShareObject的delegate接收器，一般情况下，我们会把App的AppDelegate作为全局delegate，如图：
 
 	![](http://i.imgur.com/84l0Tzm.png)
 
-2. 启动XLinkExportObject
+3. 启动XLinkExportObject
 	```
 	[[XLinkExportObject shareObject] start];
 	```

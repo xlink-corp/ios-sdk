@@ -66,7 +66,7 @@
 #define CODE_INVALID_KEY            2
 
 /**
- * ID没有找到
+ * ID没有找到订阅回包没找到目标设
  */
 #define CODE_UNAVAILABLE_ID         3
 
@@ -137,6 +137,11 @@
 #define CODE_FUNC_DEVICE_CONNECTING   -15
 
 /**
+ *  设备版本号错误
+ */
+#define CODE_FUNC_DEVICE_VERSION_ERROR -16
+
+/**
  * APP下线
  */
 #define CODE_STATE_OFFLINE          -101
@@ -166,6 +171,8 @@
 #pragma mark SDK属性KEY定义
 
 #define PROPERTY_CM_SERVER_ADDR         @"cm.server.addr"
+
+#define PROPERTY_CM_SERVER_PORT         @"cm.server.port"
 
 /**
  *  是否检测发送包是否超时
@@ -266,7 +273,7 @@
  *  @param device   设备实体
  *  @param payload  数据实体
  */
--(void)onRecvPipeData:(DeviceEntity *)device withPayload:(NSData *)payload;
+-(void)onRecvPipeData:(DeviceEntity *)device withMsgID:(UInt16)msgID withPayload:(NSData *)payload;
 
 
 /**
@@ -362,9 +369,15 @@
  */
 -(void)onHandShakeWithDevice:(DeviceEntity *)device withResult:(int)result;
 
+/**
+ *  获取到SUBKEY
+ *
+ *  @param device 设备实体
+ *  @param subkey SUBKEY
+ */
+-(void)onGotSubKeyWithDevice:(DeviceEntity *)device withSubKey:(NSNumber *)subkey;
 
 /**
- *  淘汰接口（保留）
  *  与设备订阅状态回调
  *
  *  @param device    设备实体
@@ -374,7 +387,7 @@
 -(void)onSubscription:(DeviceEntity *)device withResult:(int)result withMessageID:(int)messageID;
 
 /**
- *  与设备订阅状态回调
+ *  接收到云端通知
  *
  *  @param flag      消息类型
  *  @param data      消息实体，原始数据，如果是字符串类型的数据，前两位是字符串长度，后面是UT8的字符串数据
@@ -475,6 +488,16 @@
  */
 -(int)sendLocalPipeData:(DeviceEntity *)device andPayload:(NSData *)payload;
 
+/**
+ *  应答设备向app发送的本地pipe包
+ *
+ *  @param deviceID 设备id
+ *  @param msgID    消息id
+ *  @param code     结果
+ *
+ *  @return 成功:0 其它错误
+ */
+-(int)sendLocalPipeReplyPacketWithDeviceID:(UInt32)deviceID withMsgID:(UInt16)msgID withCode:(int8_t)code;
 
 /**
  *  通过云向设备发送透传数据
@@ -486,6 +509,15 @@
  */
 -(int)sendPipeData:(DeviceEntity *)device andPayload:(NSData *)payload;
 
+/**
+ *  应答云端向app发送的云端pipe包
+ *
+ *  @param deviceID 设备id
+ *  @param msgID    消息id
+ *  @param code     结果
+ *
+ */
+-(void)sendPipeReplyPacketWithDeviceID:(UInt32)deviceID withMsgID:(UInt16)msgID withCode:(int8_t)code;
 
 /**
  *  初始化（更新）某个设备的基本信息。用在从APP缓存设置到SDK中时使用。
@@ -494,7 +526,7 @@
  *
  *  @return 0 成功，其它失败
  */
-//-(int)initDevice:(DeviceEntity *)device;
+-(int)initDevice:(DeviceEntity *)device;
 
 
 /**
@@ -556,7 +588,7 @@
  *
  *  @return 0 成功；其他失败
  */
--(int)setSDKProperty:(NSObject *)object withKey:(NSString *)key;
+-(int)setSDKProperty:(id)object withKey:(NSString *)key;
 
 /**
  *  获取SDK运行属性
@@ -590,7 +622,25 @@
  */
 -(unsigned short)setCloudDataPoints:(NSArray <DataPointEntity *> *)dataPoints withDevice:(DeviceEntity *)device;
 
+/**
+ *  订阅设备
+ *
+ *  @param device  要订阅的设备实体
+ *  @param authKey 认证码
+ *  @param flag    1:订阅 0:取消订阅
+ *
+ *  @return 0:成功 其他:失败
+ */
 -(int)subscribeDevice:(DeviceEntity *)device andAuthKey:(NSNumber *)authKey andFlag:(int8_t)flag;
 
+/**
+ *  获取subkey（需要在内网使用）
+ *
+ *  @param device @param device 设备实体
+ *  @param ack    @param ack    accesskey
+ *
+ *  @return 0成功 其他失败
+ */
+-(int)getSubKeyWithDevice:(DeviceEntity *)device withAccesskey:(NSNumber *)ack;
 
 @end
