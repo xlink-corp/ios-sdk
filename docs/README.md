@@ -2001,6 +2001,9 @@ DEVICE_CHANGED_CONNECT_SUCCEED|	-3|	设备重新连接成功
 
 
 #### 3.2.2 IOS SDK 功能函数
+
+	详细错误码可见 XLinkExportObject.h 文件里面的“通用错误码定义”.
+
 ##### 1. 启动SDK
 
 ```
@@ -2181,7 +2184,61 @@ device | 设备实体
 
 > 设置结果通过onSetDeviceAuthorizeCode返回
 
-##### 7. 连接一个设备
+##### 7. 获取SUBKEY (v3版本新增)
+
+**函数：**
+
+```
+ -(int)getSubKeyWithDevice:(DeviceEntity *)device withAccesskey:(NSNumber *)ack;
+```
+**说明：**
+
+* v3版本如需要订阅设备，需要订阅设备的SUBKEY；
+* 该函数只有当设备与app在同一局域网下才能成功获取；
+
+**参数：**
+
+	device设备实体;
+	ack设备授权码;
+
+**返回值：**
+
+	0成功;
+	其他失败;
+
+**备注：**
+
+	如果获取到SUBKEY通过onGotSubKeyWithDevice回调
+
+##### 8. 手动订阅设备
+
+**函数：**
+
+```
+ -(int)subscribeDevice:(DeviceEntity *)device andAuthKey:(NSNumber *)authKey andFlag:(int8_t)flag;
+```
+**说明：**
+
+* 控制设备之前，先要去连接设备；
+* 该函数会自动识别设备是本地可用还是云端可用；
+
+**参数：**
+
+	device设备实体;
+	authKey(v1、v2版本是设备的授权码，v3版本是设备的订阅码(SUBKEY));
+	flag 1:订阅 0:取消订阅
+
+**返回值：**
+
+	0成功;
+	其他失败;
+
+**备注：**
+
+	订阅结果通过onSubscription回调
+
+
+##### 9. 连接一个设备
 
 **函数：**
 
@@ -2206,8 +2263,9 @@ device | 设备实体
 **备注：**
 
 	连接结果通过onConnectDevice回调
+	连接状态通过onDeviceStatusChanged回调
 
-##### 8.发送本地透传数据
+##### 10.发送本地透传数据
 
 **函数：**
 
@@ -2235,7 +2293,7 @@ payload | 数据值，二进制的。
 
 > 其发送结果通过onSendLocalPipeData回调返回。
 
-##### 9. 通过云端发送透传数据
+##### 11. 通过云端发送透传数据
 
 **函数：**
 
@@ -2262,7 +2320,7 @@ payload | 数据值，二进制的
 
 > 其发送结果通过onSendLocalPipeData回调返回。
 
-##### 10. 探测云端设备状态
+##### 12. 探测云端设备状态
 
 **函数：**
 
@@ -2288,7 +2346,7 @@ device ｜ 设备实体
 其他 | 失败
 >探测结果异步通过onDeviceProbe回调
 
-##### 11. 本地设置数据端点
+##### 13. 本地设置数据端点
 
 **函数：**
 
@@ -2314,7 +2372,7 @@ device ｜ 设备实体
 msgID（非0） | 成功
 0 | 失败
 
-##### 12. 云端设置数据端点
+##### 14. 云端设置数据端点
 
 **函数：**
 
@@ -2340,7 +2398,7 @@ device ｜ 设备实体
 msgID（非0） | 成功
 0 | 失败
 
-##### 13. 获取SDK中所有设备列表
+##### 15. 获取SDK中所有设备列表
 
 **函数：**
 
@@ -2362,7 +2420,7 @@ msgID（非0） | 成功
 | --- | --- |
 NSArray | DeviceEntity * 实体的队列
 
-##### 14. 释放SDK
+##### 16. 释放SDK
 
 **函数：**
 
@@ -2733,6 +2791,18 @@ APP开发者只用关心几个属性即可；
 	        "productID": "faf9a0964c3c450a9c2a6dbbe0028391"
 	    }
 	}
+
+##### -(id)initWithDictionary:(NSDictionary *)dict;
+	把json类型转成 DeviceEntity 对象
+
+##### -(id)initWithMac:(NSString *)mac andProductID:(NSString *)pid;
+	自定义设备，mac 和 pid 是必须的。
+	已设置过accesskey的设备可以加上accesskey
+	device.accessKey = ack;
+	v3版本还需要加上版本号
+	device.version = version;
+	已经订阅过，需要直接外网连接的需要加上deviceID
+	device.deviceID = deviceID;
 
 ##### -(NSString*)getLocalAddress;
 
