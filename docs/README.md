@@ -229,6 +229,9 @@
           
           调用该方法后，sdk会优先进行内网连接，连接失败或者超时再尝试进行外网连接 
           
+####注意：
+  调用初始化方法XlinkAgent.init(Context)和添加监听的回调XlinkNetListener方法不能在子线程中进行操作，否则可能会出错
+          
             
 
 **IOS**
@@ -672,7 +675,7 @@ SDK
        -  [数据端点更新回调 onDataPointUpdate(XDevice xDevice, List < DataPiont > dataPionts)](#onDataPointUpdate)
        -  [设备状态改变回调 onDeviceStateChanged(XDevice xdevice, int state)](#onDeviceStateChanged)
        -  [设备、云端通知和告警回调 onEventNotify(EventNotify eventNotify)](#onEventNotify)
-   -    [3.2.5 DeviceEntity属性说明代理回调说明](#step3.2.5)
+   -    [3.2.5 subscribeDevice 回调说明](#step3.2.5)
 - [3.3 常见问题](#step3.3)
 - [3.4 附录](#step3.4)
 
@@ -1996,6 +1999,22 @@ DEVICE_CHANGED_CONNECT_SUCCEED|	-3|	设备重新连接成功
   * 当 messageType=1 or 2 时,
      * notifyData: 前2个字节为字符串长度,后面的所有数据为UTF8格式的字符串
 
+#### <a name="step3.2.5">3.2.5 subscribeDevice 回调说明</a>
+#####回调方法：public void onSubscribeDevice(XDevice xDevice, int code)
+
+**参数 :**
+
+| 参数 | 说明 |
+| --- | --- |
+| xDevice | 设备对象
+|code |返回码（详细见下）|
+
+**返回码说明 :**
+| 返回码 | 说明 |
+|0|订阅成功|
+|3|设备未在该企业授权|
+|10|设备不在线|
+
 
 
 
@@ -2925,6 +2944,8 @@ DEVICE_STATE_LOCAL_LINK|0|设备局域网在线|XDevice 的getDevcieConnectState
 DEVICE_STATE_OUTER_LINK|1|设备云端在线|XDevice 的getDevcieConnectStates()方法
 CHANGED_UPDATAPOINT_LOCAL|0|内网通道的更新数据端点包channel类型|onDataPointUpdate(XDevice,List<DataPoint> datapoints, int channel)
 CHANGED_UPDATAPOINT_CLOUD|1|云端网络通道的更新数据端点包channel类型|onDataPointUpdate(XDevice,List<DataPoint> datapoints, int channel)
+onSubscribeDevice回调|3|未在该企业授权|public void onSubscribeDevice(XDevice xDevice, int i)
+onSubscribeDevice回调|10|设备不在线|public void onSubscribeDevice(XDevice xDevice, int i)
 ...	| ... | ... | ...
 
 ## 四、设备分享
