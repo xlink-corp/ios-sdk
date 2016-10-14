@@ -40,7 +40,7 @@ typedef enum : UInt8 {
 @property (nonatomic,assign)double lastGetPingReturn;   //获得ping回包的最近的时间，用来判断设备是否下线了
 @property (nonatomic,assign) unsigned short deviceType; //设备类型
 @property (strong, nonatomic) NSNumber *accessKey;
-@property (assign, nonatomic) NSNumber *subKey;         //订阅密码
+@property (strong, nonatomic) NSNumber *subKey;         //订阅密码
 @property (strong, nonatomic) NSString *deviceName;     //设备名称
 
 @property (assign, nonatomic, readonly) bool isConnected; //设备是否连接上
