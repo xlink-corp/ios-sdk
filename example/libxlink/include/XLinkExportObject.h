@@ -356,7 +356,6 @@
  *  设备上下线状态回调
  *
  *  @param device 设备实体
- *  @param state  状态
  */
 -(void)onDeviceStatusChanged:(DeviceEntity *)device;
 
