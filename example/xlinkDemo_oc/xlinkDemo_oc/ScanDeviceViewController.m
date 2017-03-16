@@ -188,7 +188,6 @@
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"deviceList"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    [[XLinkExportObject sharedObject] clearDeviceList];
     [_deviceList removeAllObjects];
     [_tableView reloadData];
 }

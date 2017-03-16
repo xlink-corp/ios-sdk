@@ -10,6 +10,7 @@
 #import "XLinkExportObject.h"
 #import "DeviceEntity.h"
 #import "HttpRequest.h"
+#import "EventNotifyRetPacket.h"
 
 @interface AppDelegate ()<XlinkExportObjectDelegate>
 
@@ -179,17 +180,8 @@
 }
 
 //接收到平台发送的Event Notify消息
--(void)onNotifyWithFlag:(unsigned char)flag withMessageData:(NSData *)data fromID:(int)fromID messageID:(int)messageID {
-    NSLog(@"onNotifyWithFlag flag : %d , fromID : %d, messageID : %d;", flag, fromID, messageID);
-    NSLog(@"MessageData with length %ld", (unsigned long)data.length);
-    if( flag == EVENT_DATAPOINT_NOTICE || flag == EVENT_DATAPOINT_ALERT ) {
-        int len = 0;
-        [data getBytes:&len range:NSMakeRange(0, 2)];
-        len = ntohs(len);
-        NSData * temp = [data subdataWithRange:NSMakeRange(2, len)];
-        NSString * text = [NSString stringWithUTF8String:[temp bytes]];
-        NSLog(@"Message text : %@", text);
-    }
+-(void)onGetEventNotify:(EventNotifyRetPacket *)packet{
+    
 }
 
 #pragma mark

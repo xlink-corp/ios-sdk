@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 
-@class DataPointEntity;
+@class DataPointEntity, EventNotifyRetPacket;
 
 #define XLINK_SDK_VER         @"1.2.0.14134"
 
@@ -66,7 +66,7 @@
 #define CODE_INVALID_KEY            2
 
 /**
- * ID没有找到订阅回包没找到目标设
+ * ID没有找到订阅回包没找到目标设备
  */
 #define CODE_UNAVAILABLE_ID         3
 
@@ -374,7 +374,7 @@
  *  @param device 设备实体
  *  @param subkey SUBKEY
  */
--(void)onGotSubKeyWithDevice:(DeviceEntity *)device withSubKey:(NSNumber *)subkey;
+-(void)onGotSubKeyWithDevice:(DeviceEntity *)device withResult:(int)result withSubKey:(NSNumber *)subkey;
 
 /**
  *  与设备订阅状态回调
@@ -385,6 +385,8 @@
  */
 -(void)onSubscription:(DeviceEntity *)device withResult:(int)result withMessageID:(int)messageID;
 
+-(void)onGetEventNotify:(EventNotifyRetPacket *)packet;
+
 /**
  *  接收到云端通知
  *
@@ -393,11 +395,13 @@
  *  @param fromID    消息发送者ID
  *  @param messageID 消息ID，APP可以忽略
  */
--(void)onNotifyWithFlag:(unsigned char)flag withMessageData:(NSData *)data fromID:(int)fromID messageID:(int)messageID;
+//-(void)onNotifyWithFlag:(unsigned char)flag withMessageData:(NSData *)data fromID:(int)fromID messageID:(int)messageID;
 
 -(void)onSetLocalDataPoint:(DeviceEntity *)device withResult:(int)result withMsgID:(unsigned short)msgID;
 
 -(void)onSetCloudDataPoint:(DeviceEntity *)device withResult:(int)result withMsgID:(unsigned short)msgID;
+
+-(void)onSetLocalDeviceName:(DeviceEntity *)device withResult:(int)result;
 
 @end
 
@@ -641,5 +645,16 @@
  *  @return 0成功 其他失败
  */
 -(int)getSubKeyWithDevice:(DeviceEntity *)device withAccesskey:(NSNumber *)ack;
+
+
+/**
+ 本地设置设备名称
+
+ @param device 设备实体
+ @param name   设备名称
+
+ @return 0成功 其他失败
+ */
+-(int)setLocalDeviceName:(DeviceEntity *)device withName:(NSString *)name;
 
 @end
